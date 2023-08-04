@@ -1,2 +1,2 @@
 # streamlink_web-ui
-a simple and terrible simple web-ui to the well-known streamlink cli application
+a lightweight yet terrible simple web-ui to the well-known streamlink cli application made for my RaspberryPi®
