@@ -1,0 +1,129 @@
+
+@font-face {
+    font-family: 'Inter';
+    src: url('Inter-Regular.ttf') format('truetype'); 
+  }
+  
+@font-face {
+    font-family: 'Kulim Park';
+    src: url('KulimPark-Regular.ttf') format('truetype'); 
+  }
+
+
+.desktop-1, .desktop-1 * { box-sizing: border-box; }.desktop-1 {background: #121212; width: 1280px; height: 1024px; position: relative; overflow: hidden;}
+ .rectangle-2 {background: #6441a5; width: 60px; height: 1024px; position: absolute; left: 0px;top: 0px;}
+ .rectangle-1 {background: #6441a5; width: 1280px; height: 69px; position: absolute; left: 0px;top: 0px;}
+ .streamlink-ui {color: #ababab; text-align: left; font: 600 36px 'Kulim Park', sans-serif; position: absolute; left: 64px;top: 15px; display: flex;align-items: center;justify-content: flex-start}
+ .raspberry-pi {color: #ababab; text-align: left; font: 600 36px 'Kulim Park', sans-serif; position: absolute; left: 1057px;top: 14px; display: flex;align-items: center;justify-content: flex-start}
+ .icon-1 {width: 60px; height: 60px; position: absolute; left: 2px;top: 5px; overflow: hidden;}
+ .group-1 {position: absolute; left: 6.52px;top: 6.57px; overflow: visible;}
+ .rectangle-3 {background: linear-gradient(180deg, rgba(52, 52, 52, 1.00) 99.98999834060669%,rgba(255, 255, 255, 0.00) 100%); border-radius: 43px; border-style: solid; border-color: #000000; border-width: 1px; width: 1140px; height: 333px; position: absolute; left: 106px;top: 116px; box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);}
+ .rectangle-4 {background: linear-gradient(180deg, rgba(52, 52, 52, 1.00) 99.98999834060669%,rgba(255, 255, 255, 0.00) 100%); border-radius: 43px; width: 1140px; height: 465px; position: absolute; left: 106px;top: 517px; box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);}
+ .rectangle-7 {background: linear-gradient(180deg, rgba(52, 52, 52, 1.00) 99.98999834060669%,rgba(255, 255, 255, 0.00) 100%); border-radius: 43px; border-style: solid; border-color: #ababab; border-width: 3px; width: 1104px; height: 432px; position: absolute; left: 124px;top: 535px;}
+ .create-audio-only-file {color: #ababab; text-align: left; font: 400 24px 'Inter', sans-serif; position: absolute; left: 180px;top: 216px; display: flex;align-items: center;justify-content: flex-start}
+ .use-a-loop-to-record-a-future-stream {color: #ababab; text-align: left; font: 400 24px 'Inter', sans-serif; position: absolute; left: 180px;top: 268px; display: flex;align-items: center;justify-content: flex-start}
+ .use-time-and-date-in-filename {color: #ababab; text-align: left; font: 400 24px 'Inter', sans-serif; position: absolute; left: 180px;top: 318px; display: flex;align-items: center;justify-content: flex-start}
+ .use-channel-name-in-filename {color: #ababab; text-align: left; font: 400 24px 'Inter', sans-serif; position: absolute; left: 180px;top: 369px; display: flex;align-items: center;justify-content: flex-start}
+ .internet-speed {position: absolute; inset: 0;}
+ .speed-1 {color: #ababab; text-align: left; font: 400 24px 'Inter', sans-serif; position: absolute; left: 791px;top: 555px; display: flex;align-items: center;justify-content: flex-start}
+ .speed-2 {color: #ababab; text-align: left; font: 400 24px 'Inter', sans-serif; position: absolute; left: 791px;top: 594px; display: flex;align-items: center;justify-content: flex-start}
+ .speed-3 {color: #ababab; text-align: left; font: 400 24px 'Inter', sans-serif; position: absolute; left: 791px;top: 633px; display: flex;align-items: center;justify-content: flex-start}
+ .speed-4 {color: #ababab; text-align: left; font: 400 24px 'Inter', sans-serif; position: absolute; left: 791px;top: 672px; display: flex;align-items: center;justify-content: flex-start}
+ .speed-5 {color: #ababab; text-align: left; font: 400 24px 'Inter', sans-serif; position: absolute; left: 791px;top: 711px; display: flex;align-items: center;justify-content: flex-start}
+ .speed-6 {color: #ababab; text-align: left; font: 400 24px 'Inter', sans-serif; position: absolute; left: 791px;top: 750px; display: flex;align-items: center;justify-content: flex-start}
+ .speed-7 {color: #ababab; text-align: left; font: 400 24px 'Inter', sans-serif; position: absolute; left: 791px;top: 789px; display: flex;align-items: center;justify-content: flex-start}
+ .speed-8 {color: #ababab; text-align: left; font: 400 24px 'Inter', sans-serif; position: absolute; left: 791px;top: 828px; display: flex;align-items: center;justify-content: flex-start}
+ .speed-9 {color: #ababab; text-align: left; font: 400 24px 'Inter', sans-serif; position: absolute; left: 791px;top: 867px; display: flex;align-items: center;justify-content: flex-start}
+ .speed-10 {color: #ababab; text-align: left; font: 400 24px 'Inter', sans-serif; position: absolute; left: 791px;top: 906px; display: flex;align-items: center;justify-content: flex-start}
+ .filesize {position: absolute; inset: 0;}
+ .data-1 {color: #ababab; text-align: left; font: 400 24px 'Inter', sans-serif; position: absolute; left: 586px;top: 555px; display: flex;align-items: center;justify-content: flex-start}
+ .data-2 {color: #ababab; text-align: left; font: 400 24px 'Inter', sans-serif; position: absolute; left: 586px;top: 594px; display: flex;align-items: center;justify-content: flex-start}
+ .data-3 {color: #ababab; text-align: left; font: 400 24px 'Inter', sans-serif; position: absolute; left: 586px;top: 633px; display: flex;align-items: center;justify-content: flex-start}
+ .data-4 {color: #ababab; text-align: left; font: 400 24px 'Inter', sans-serif; position: absolute; left: 586px;top: 672px; display: flex;align-items: center;justify-content: flex-start}
+ .data-5 {color: #ababab; text-align: left; font: 400 24px 'Inter', sans-serif; position: absolute; left: 586px;top: 711px; display: flex;align-items: center;justify-content: flex-start}
+ .data-6 {color: #ababab; text-align: left; font: 400 24px 'Inter', sans-serif; position: absolute; left: 586px;top: 750px; display: flex;align-items: center;justify-content: flex-start}
+ .data-7 {color: #ababab; text-align: left; font: 400 24px 'Inter', sans-serif; position: absolute; left: 586px;top: 789px; display: flex;align-items: center;justify-content: flex-start}
+ .data-8 {color: #ababab; text-align: left; font: 400 24px 'Inter', sans-serif; position: absolute; left: 586px;top: 828px; display: flex;align-items: center;justify-content: flex-start}
+ .data-9 {color: #ababab; text-align: left; font: 400 24px 'Inter', sans-serif; position: absolute; left: 586px;top: 867px; display: flex;align-items: center;justify-content: flex-start}
+ .data-10 {color: #ababab; text-align: left; font: 400 24px 'Inter', sans-serif; position: absolute; left: 586px;top: 906px; display: flex;align-items: center;justify-content: flex-start}
+ .services {position: absolute; inset: 0;}
+ .service-1 {color: #ababab; text-align: left; font: 400 24px 'Inter', sans-serif; position: absolute; left: 156px;top: 555px; display: flex;align-items: center;justify-content: flex-start}
+ .service-2 {color: #ababab; text-align: left; font: 400 24px 'Inter', sans-serif; position: absolute; left: 156px;top: 594px; display: flex;align-items: center;justify-content: flex-start}
+ .service-3 {color: #ababab; text-align: left; font: 400 24px 'Inter', sans-serif; position: absolute; left: 156px;top: 633px; display: flex;align-items: center;justify-content: flex-start}
+ .service-4 {color: #ababab; text-align: left; font: 400 24px 'Inter', sans-serif; position: absolute; left: 156px;top: 672px; display: flex;align-items: center;justify-content: flex-start}
+ .service-5 {color: #ababab; text-align: left; font: 400 24px 'Inter', sans-serif; position: absolute; left: 156px;top: 711px; display: flex;align-items: center;justify-content: flex-start}
+ .service-6 {color: #ababab; text-align: left; font: 400 24px 'Inter', sans-serif; position: absolute; left: 156px;top: 750px; display: flex;align-items: center;justify-content: flex-start}
+ .service-7 {color: #ababab; text-align: left; font: 400 24px 'Inter', sans-serif; position: absolute; left: 156px;top: 789px; display: flex;align-items: center;justify-content: flex-start}
+ .service-8 {color: #ababab; text-align: left; font: 400 24px 'Inter', sans-serif; position: absolute; left: 156px;top: 828px; display: flex;align-items: center;justify-content: flex-start}
+ .service-9 {color: #ababab; text-align: left; font: 400 24px 'Inter', sans-serif; position: absolute; left: 156px;top: 867px; display: flex;align-items: center;justify-content: flex-start}
+ .service-10 {color: #ababab; text-align: left; font: 400 24px 'Inter', sans-serif; position: absolute; left: 156px;top: 906px; display: flex;align-items: center;justify-content: flex-start}
+ .streamername {position: absolute; inset: 0;}
+ .rectangle-42 {background: #343434; border-radius: 27px; border-style: solid; border-color: #ababab; border-width: 1px; width: 373px; height: 64px; position: absolute; left: 137px;top: 195px; transform-origin: 0 0; transform: rotate(0deg) scale(1, -1);}
+ .rectangle-5 {background: #343434; width: 124px; height: 14px; position: absolute; left: 158px;top: 125px;}
+ .enter-channel-name {color: #ababab; text-align: left; font: 400 12px 'Inter', sans-serif; position: absolute; left: 162px;top: 123px;}
+ .twitch-logo-2-1 {width: 45px; height: 45px; position: absolute; left: 456px;top: 141px;}
+ .ellipse-1-img {width: 45px; height: 38px; position: absolute; left: 859px;top: 147px;}
+ .filename {position: absolute; inset: 0;}
+ .rectangle-8 {background: #343434; border-radius: 27px; border-style: solid; border-color: #ababab; border-width: 1px; width: 373px; height: 64px; position: absolute; left: 539px;top: 199px; transform-origin: 0 0; transform: rotate(0deg) scale(1, -1);}
+ .rectangle-72 {background: #343434; width: 142px; height: 14px; position: absolute; left: 560px;top: 129px;}
+ .enter-custom-filename {color: #ababab; text-align: left; font: 400 12px 'Inter', sans-serif; position: absolute; left: 564px;top: 127px;}
+ .ellipse-1 {background: #ababab; border-radius: 50%; width: 45px; height: 45px; position: absolute; left: 858px;top: 145px;}
+ .file-1 {position: absolute; left: 865px;top: 152px; overflow: visible;}
+ .stop {position: absolute; inset: 0;}
+ .start-button {width: 77px; height: 23.26px; position: static;}
+ .rectangle-6 {background: #6441a5; border-radius: 23px; border-style: solid; border-color: #6441a5; border-width: 1px; width: 77px; height: 23.26px; position: absolute; left: 1018px;top: 584.26px; transform-origin: 0 0; transform: rotate(0deg) scale(1, -1);}
+ .stop2 {color: #ababab; text-align: left; font: 400 12px 'Inter', sans-serif; position: absolute; left: calc(50% - -401px);top: calc(50% - -54px); width: 32px; height: 15px;}
+ .rectangle-62 {background: #6441a5; border-radius: 23px; border-style: solid; border-color: #6441a5; border-width: 1px; width: 77px; height: 23.26px; position: absolute; left: 1017px;top: 619.26px; transform-origin: 0 0; transform: rotate(0deg) scale(1, -1);}
+ .stop3 {color: #ababab; text-align: left; font: 400 12px 'Inter', sans-serif; position: absolute; left: calc(50% - -400px);top: calc(50% - -89px); width: 32px; height: 15px;}
+ .rectangle-63 {background: #6441a5; border-radius: 23px; border-style: solid; border-color: #6441a5; border-width: 1px; width: 77px; height: 23.26px; position: absolute; left: 1016px;top: 658.26px; transform-origin: 0 0; transform: rotate(0deg) scale(1, -1);}
+ .stop4 {color: #ababab; text-align: left; font: 400 12px 'Inter', sans-serif; position: absolute; left: calc(50% - -399px);top: calc(50% - -128px); width: 32px; height: 15px;}
+ .rectangle-64 {background: #6441a5; border-radius: 23px; border-style: solid; border-color: #6441a5; border-width: 1px; width: 77px; height: 23.26px; position: absolute; left: 1018px;top: 697.26px; transform-origin: 0 0; transform: rotate(0deg) scale(1, -1);}
+ .stop5 {color: #ababab; text-align: left; font: 400 12px 'Inter', sans-serif; position: absolute; left: calc(50% - -399px);top: calc(50% - -167px); width: 32px; height: 15px;}
+ .rectangle-65 {background: #6441a5; border-radius: 23px; border-style: solid; border-color: #6441a5; border-width: 1px; width: 77px; height: 23.26px; position: absolute; left: 1018px;top: 736.26px; transform-origin: 0 0; transform: rotate(0deg) scale(1, -1);}
+ .stop6 {color: #ababab; text-align: left; font: 400 12px 'Inter', sans-serif; position: absolute; left: calc(50% - -399px);top: calc(50% - -206px); width: 32px; height: 15px;}
+ .rectangle-66 {background: #6441a5; border-radius: 23px; border-style: solid; border-color: #6441a5; border-width: 1px; width: 77px; height: 23.26px; position: absolute; left: 1018px;top: 775.26px; transform-origin: 0 0; transform: rotate(0deg) scale(1, -1);}
+ .stop7 {color: #ababab; text-align: left; font: 400 12px 'Inter', sans-serif; position: absolute; left: calc(50% - -399px);top: calc(50% - -245px); width: 32px; height: 15px;}
+ .rectangle-67 {background: #6441a5; border-radius: 23px; border-style: solid; border-color: #6441a5; border-width: 1px; width: 77px; height: 23.26px; position: absolute; left: 1018px;top: 814.26px; transform-origin: 0 0; transform: rotate(0deg) scale(1, -1);}
+ .stop8 {color: #ababab; text-align: left; font: 400 12px 'Inter', sans-serif; position: absolute; left: calc(50% - -399px);top: calc(50% - -284px); width: 32px; height: 15px;}
+ .rectangle-68 {background: #6441a5; border-radius: 23px; border-style: solid; border-color: #6441a5; border-width: 1px; width: 77px; height: 23.26px; position: absolute; left: 1018px;top: 853.26px; transform-origin: 0 0; transform: rotate(0deg) scale(1, -1);}
+ .stop9 {color: #ababab; text-align: left; font: 400 12px 'Inter', sans-serif; position: absolute; left: calc(50% - -399px);top: calc(50% - -323px); width: 32px; height: 15px;}
+ .rectangle-69 {background: #6441a5; border-radius: 23px; border-style: solid; border-color: #6441a5; border-width: 1px; width: 77px; height: 23.26px; position: absolute; left: 1018px;top: 892.26px; transform-origin: 0 0; transform: rotate(0deg) scale(1, -1);}
+ .stop10 {color: #ababab; text-align: left; font: 400 12px 'Inter', sans-serif; position: absolute; left: calc(50% - -399px);top: calc(50% - -362px); width: 32px; height: 15px;}
+ .rectangle-610 {background: #6441a5; border-radius: 23px; border-style: solid; border-color: #6441a5; border-width: 1px; width: 77px; height: 23.26px; position: absolute; left: 1018px;top: 931.26px; transform-origin: 0 0; transform: rotate(0deg) scale(1, -1);}
+ .stop11 {color: #ababab; text-align: left; font: 400 12px 'Inter', sans-serif; position: absolute; left: calc(50% - -399px);top: calc(50% - -401px); width: 32px; height: 15px;}
+ .kill {position: absolute; inset: 0;}
+ .rectangle-611 {background: #6441a5; border-radius: 23px; border-style: solid; border-color: #6441a5; border-width: 1px; width: 77px; height: 23.26px; position: absolute; left: 1113px;top: 584.26px; transform-origin: 0 0; transform: rotate(0deg) scale(1, -1);}
+ .kill2 {color: #ababab; text-align: left; font: 400 12px 'Inter', sans-serif; position: absolute; left: calc(50% - -497px);top: calc(50% - -54px); width: 25px; height: 15px;}
+ .rectangle-612 {background: #6441a5; border-radius: 23px; border-style: solid; border-color: #6441a5; border-width: 1px; width: 77px; height: 23.26px; position: absolute; left: 1112px;top: 619.26px; transform-origin: 0 0; transform: rotate(0deg) scale(1, -1);}
+ .kill3 {color: #ababab; text-align: left; font: 400 12px 'Inter', sans-serif; position: absolute; left: calc(50% - -497px);top: calc(50% - -89px); width: 25px; height: 15px;}
+ .rectangle-613 {background: #6441a5; border-radius: 23px; border-style: solid; border-color: #6441a5; border-width: 1px; width: 77px; height: 23.26px; position: absolute; left: 1111px;top: 658.26px; transform-origin: 0 0; transform: rotate(0deg) scale(1, -1);}
+ .kill4 {color: #ababab; text-align: left; font: 400 12px 'Inter', sans-serif; position: absolute; left: calc(50% - -497px);top: calc(50% - -128px); width: 25px; height: 15px;}
+ .rectangle-614 {background: #6441a5; border-radius: 23px; border-style: solid; border-color: #6441a5; border-width: 1px; width: 77px; height: 23.26px; position: absolute; left: 1113px;top: 697.26px; transform-origin: 0 0; transform: rotate(0deg) scale(1, -1);}
+ .kill5 {color: #ababab; text-align: left; font: 400 12px 'Inter', sans-serif; position: absolute; left: calc(50% - -499px);top: calc(50% - -167px); width: 25px; height: 15px;}
+ .rectangle-615 {background: #6441a5; border-radius: 23px; border-style: solid; border-color: #6441a5; border-width: 1px; width: 77px; height: 23.26px; position: absolute; left: 1113px;top: 736.26px; transform-origin: 0 0; transform: rotate(0deg) scale(1, -1);}
+ .kill6 {color: #ababab; text-align: left; font: 400 12px 'Inter', sans-serif; position: absolute; left: calc(50% - -499px);top: calc(50% - -206px); width: 25px; height: 15px;}
+ .rectangle-616 {background: #6441a5; border-radius: 23px; border-style: solid; border-color: #6441a5; border-width: 1px; width: 77px; height: 23.26px; position: absolute; left: 1113px;top: 775.26px; transform-origin: 0 0; transform: rotate(0deg) scale(1, -1);}
+ .kill7 {color: #ababab; text-align: left; font: 400 12px 'Inter', sans-serif; position: absolute; left: calc(50% - -499px);top: calc(50% - -245px); width: 25px; height: 15px;}
+ .rectangle-617 {background: #6441a5; border-radius: 23px; border-style: solid; border-color: #6441a5; border-width: 1px; width: 77px; height: 23.26px; position: absolute; left: 1113px;top: 814.26px; transform-origin: 0 0; transform: rotate(0deg) scale(1, -1);}
+ .kill8 {color: #ababab; text-align: left; font: 400 12px 'Inter', sans-serif; position: absolute; left: calc(50% - -499px);top: calc(50% - -284px); width: 25px; height: 15px;}
+ .rectangle-618 {background: #6441a5; border-radius: 23px; border-style: solid; border-color: #6441a5; border-width: 1px; width: 77px; height: 23.26px; position: absolute; left: 1113px;top: 853.26px; transform-origin: 0 0; transform: rotate(0deg) scale(1, -1);}
+ .kill9 {color: #ababab; text-align: left; font: 400 12px 'Inter', sans-serif; position: absolute; left: calc(50% - -499px);top: calc(50% - -323px); width: 25px; height: 15px;}
+ .rectangle-619 {background: #6441a5; border-radius: 23px; border-style: solid; border-color: #6441a5; border-width: 1px; width: 77px; height: 23.26px; position: absolute; left: 1113px;top: 892.26px; transform-origin: 0 0; transform: rotate(0deg) scale(1, -1);}
+ .kill10 {color: #ababab; text-align: left; font: 400 12px 'Inter', sans-serif; position: absolute; left: calc(50% - -499px);top: calc(50% - -362px); width: 25px; height: 15px;}
+ .rectangle-620 {background: #6441a5; border-radius: 23px; border-style: solid; border-color: #6441a5; border-width: 1px; width: 77px; height: 23.26px; position: absolute; left: 1113px;top: 931.26px; transform-origin: 0 0; transform: rotate(0deg) scale(1, -1);}
+ .kill11 {color: #ababab; text-align: left; font: 400 12px 'Inter', sans-serif; position: absolute; left: calc(50% - -499px);top: calc(50% - -401px); width: 25px; height: 15px;}
+ .start-button2 {position: absolute; inset: 0;}
+ .rectangle-621 {background: #6441a5; border-radius: 23px; border-style: solid; border-color: #6441a5; border-width: 1px; width: 149px; height: 45px; position: absolute; left: 651px;top: 404px; transform-origin: 0 0; transform: rotate(0deg) scale(1, -1);}
+ .start {color: #ababab; text-align: left; font: 400 24px 'Inter', sans-serif; position: absolute; left: calc(50% - -48px);top: calc(50% - 145px);}
+ .channel-picture-2 {border-radius: 43px; width: 264px; height: 264px; position: absolute; left: 942px;top: 150px;}
+ .rectangle-9 {background: #343434; width: 208px; height: 24px; position: absolute; left: 156px;top: 521px;}
+ .services-running {color: #ababab; text-align: left; font: 400 24px 'Inter', sans-serif; position: absolute; left: 160px;top: 521px; display: flex;align-items: center;justify-content: flex-start}
+ .checkbox {background: #6441a5; border-radius: 8px; border-style: solid; border-color: #ababab; border-width: 1px; padding: 8px 6px 8px 6px; display: flex; flex-direction: column; gap: 10px; align-items: center; justify-content: center; width: 31px; height: 31px; position: absolute; left: 137px;top: 266px; overflow: hidden;}
+ .frame-1 {display: flex; flex-direction: column; gap: 10px; align-items: center; justify-content: center; align-self: stretch;flex: 1; position: relative; overflow: visible;}
+ .checkbox2 {background: #6441a5; border-radius: 8px; border-style: solid; border-color: #ababab; border-width: 1px; padding: 8px 6px 8px 6px; display: flex; flex-direction: column; gap: 10px; align-items: center; justify-content: center; width: 31px; height: 31px; position: absolute; left: 137px;top: 368px; overflow: hidden;}
+ .frame-12 {display: flex; flex-direction: column; gap: 10px; align-items: center; justify-content: center; align-self: stretch;flex: 1; position: relative; overflow: visible;}
+ .checkbox3 {background: #6441a5; border-radius: 8px; border-style: solid; border-color: #ababab; border-width: 1px; padding: 8px 6px 8px 6px; display: flex; flex-direction: column; gap: 10px; align-items: center; justify-content: center; width: 31px; height: 31px; position: absolute; left: 137px;top: 215px; overflow: hidden;}
+ .frame-13 {display: flex; flex-direction: column; gap: 10px; align-items: center; justify-content: center; align-self: stretch;flex: 1; position: relative; overflow: visible;}
+ .checkbox4 {background: #6441a5; border-radius: 8px; border-style: solid; border-color: #ababab; border-width: 1px; padding: 8px 6px 8px 6px; display: flex; flex-direction: column; gap: 10px; align-items: center; justify-content: center; width: 31px; height: 31px; position: absolute; left: 137px;top: 317px; overflow: hidden;}
+ .checkbox1 {background: #6441a5; border-radius: 8px; border-style: solid; border-color: #ababab; border-width: 1px; padding: 8px 6px 8px 6px; display: flex; flex-direction: column; gap: 10px; align-items: center; justify-content: center; width: 31px; height: 31px; position: absolute; left: 137px;top: 266px; overflow: hidden;}
+ .frame-14 {display: flex; flex-direction: column; gap: 10px; align-items: center; justify-content: center; align-self: stretch;flex: 1; position: relative; overflow: visible;}
