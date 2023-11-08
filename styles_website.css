@@ -1,0 +1,107 @@
+
+@font-face {
+    font-family: 'Inter';
+    src: url('fonts/Inter-Regular.ttf') format('truetype'); 
+  }
+
+
+  @font-face {
+    font-family: 'Kulim Park';
+    src: url('fonts/KulimPark-Regular.ttf') format('truetype'); 
+  }
+
+
+  @font-face {
+    font-family: 'Montserrat';
+    src: url('fonts/Montserrat-Medium.ttf') format('truetype'); 
+  }
+
+  @font-face {
+    font-family: 'Mond Bold';
+    src: url('fonts/Moon\ Bold.otf') format('truetype'); 
+  }
+
+  @font-face {
+    font-family: 'Mond Light';
+    src: url('fonts/Moon\ Light.otf') format('truetype'); 
+  }
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    font-family: "Kulim Park", sans-serif;
+    font-weight: 500;
+    font-size: 36px;
+    color: #ababab;
+    text-decoration: none;
+}
+
+body {
+    background-color: #1e1e1e;
+    background-position: center;
+}
+
+.nav1 {
+  position: fabsolute;
+    background-color: #6441a5;
+    height: 70px;
+    width: 100vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+}
+
+.nav2 {
+    position: fixed;
+    display: flex;
+    justify-content: space-between;
+    background-color: #6441a5;
+    align-items: center;
+    height: 100vh;
+    width: 70px;
+}
+
+.logo {
+    width: 56px;
+    /* use width*1.25=height */
+    height: 70px;
+    margin-left: 7px;
+    margin-right: 7px;
+    margin-top: auto;
+}
+
+.title_heading {
+    margin-right: auto;
+}
+
+.hostname_heading {
+    margin-right: 12px; 
+}
+
+.main-content {
+  margin-left: 70px;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 70px);
+  width: calc(100vw - 70px);
+}
+
+.section1 {
+  margin-top: 5px;
+  margin-left: 10px;
+  flex: 1;
+  background-color: #b91414;
+}
+
+.section2 {
+  margin-top: 5px;
+  margin-left: 10px;
+  flex: 1;
+  background-color: #280ab1;
+}
+
