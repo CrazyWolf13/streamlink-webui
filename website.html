@@ -1,23 +1,79 @@
 <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <title>Streamlink-UI</title>
-            <meta http-equiv="X-UA-Compatible" content="IE=edge">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <link rel="stylesheet" href="./styles_website.css">
-        </head>
-        <body>
-            <div class="nav1">
-                <img class="logo" src="./assets/icon.svg" alt="Stremlink-Logo"></img>
-                <h1 class="title_heading"><span data-variable="title_heading"></span></h1>
-                <h1 class="hostname_heading"><span data-variable="hostname"></span></h1>
-            </div>
-            <div class="nav2"></div>
-            <div class="main-content">
-                <div class="section1"><h1 class="hostname_heading"><span data-variable="hostname"></span></h1></div>
-                <div class="section2"><h1 class="hostname_heading"><span data-variable="hostname"></span></h1></div>
-            </div>
-            <script src="variables_script.js"></script>
-        </body>
-        </html>  
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Streamlink-UI</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./styles_website.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+    <div class="top-nav">
+        <header>
+            <h1 class="logo"><span data-variable="title_heading"></span></h1>
+            <nav>
+                <ul class="nav_links">
+                    <li><a href="#"><span data-variable="hostname"></a></li>
+                    <li><a href="#"><span data-variable="disk_space"></a></li>
+                </ul>
+            </nav>
+            <a class="cta" href="#"><button>Contacts</button></a>
+        </header>    
+    </div>
+
+    <div class="side-nav">
+        <nav>
+            <ul>
+                <li>
+                    <a href="#" class="logo">
+                        <img src="./assets/icon.svg" alt="">
+                        <span class="nav-item"></span>
+                    </a>
+                </li>
+                <li><a href="#">
+                    <i class="fas fa-home"></i>
+                    <span class="nav-item"><span data-variable="hostname"></span>
+                </a></li>
+                <li><a href="#">
+                    <i class="fas fa-user"></i>
+                    <span class="nav-item">Profile</span>
+                </a></li>
+                <li><a href="#">
+                    <i class="fas fa-wallet"></i>
+                    <span class="nav-item">Wallet</span>
+                </a></li>
+                <li><a href="#">
+                    <i class="fas fa-chart-bar"></i>
+                    <span class="nav-item">Analytics</span>
+                </a></li>
+                <li><a href="#">
+                    <i class="fas fa-tasks"></i>
+                    <span class="nav-item">Tasks</span>
+                </a></li>
+                <li><a href="#">
+                    <i class="fas fa-cog"></i>
+                    <span class="nav-item">Settings</span>
+                </a></li>
+                <li><a href="#">
+                    <i class="fas fa-question-circle"></i>
+                    <span class="nav-item">Help</span>
+                </a></li>
+                <li><a href="#" class="logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span class="nav-item">Log out</span>
+                </a></li>
+            </ul>
+        </nav>
+    </div>
+    
+
+    <div class="main">
+        <div class="testing">
+            <h1>TESTING</h1>
+        </div>
+    </div>
+
+    <script src="variables_script.js"></script>
+</body>
+</html>  
