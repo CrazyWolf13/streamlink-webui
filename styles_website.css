@@ -1,107 +1,160 @@
-
-@font-face {
-    font-family: 'Inter';
-    src: url('fonts/Inter-Regular.ttf') format('truetype'); 
-  }
-
-
-  @font-face {
-    font-family: 'Kulim Park';
-    src: url('fonts/KulimPark-Regular.ttf') format('truetype'); 
-  }
-
-
-  @font-face {
-    font-family: 'Montserrat';
-    src: url('fonts/Montserrat-Medium.ttf') format('truetype'); 
-  }
-
-  @font-face {
-    font-family: 'Mond Bold';
-    src: url('fonts/Moon\ Bold.otf') format('truetype'); 
-  }
-
-  @font-face {
-    font-family: 'Mond Light';
-    src: url('fonts/Moon\ Light.otf') format('truetype'); 
-  }
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Kulim+Park&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Monda:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Monda:wght@300&display=swap');
 
 * {
-    box-sizing: border-box;
     margin: 0;
     padding: 0;
-}
-
-h1 {
-    font-family: "Kulim Park", sans-serif;
-    font-weight: 500;
-    font-size: 36px;
-    color: #ababab;
+    outline: none;
+    border: none;
     text-decoration: none;
+    box-sizing: border-box;
+    font-family: Popins, sans-serif;
 }
 
 body {
-    background-color: #1e1e1e;
-    background-position: center;
+  background: #dfe9f5;
 }
 
-.nav1 {
-  position: fabsolute;
-    background-color: #6441a5;
-    height: 70px;
-    width: 100vw;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
+.top-nav .logo {
+  margin-right: auto;
 }
 
-.nav2 {
-    position: fixed;
-    display: flex;
-    justify-content: space-between;
-    background-color: #6441a5;
-    align-items: center;
-    height: 100vh;
-    width: 70px;
+.top-nav li, a, button {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  color: aqua;
 }
 
-.logo {
-    width: 56px;
-    /* use width*1.25=height */
-    height: 70px;
-    margin-left: 7px;
-    margin-right: 7px;
-    margin-top: auto;
-}
-
-.title_heading {
-    margin-right: auto;
-}
-
-.hostname_heading {
-    margin-right: 12px; 
-}
-
-.main-content {
-  margin-left: 70px;
+.top-nav header {
+  background-color: rgb(226, 247, 206);
   display: flex;
-  flex-direction: column;
-  height: calc(100vh - 70px);
-  width: calc(100vw - 70px);
+  justify-content: flex-end;
+  align-items: center;
+  padding-left: calc(90px + 3%);
+  padding-right: 3%;
+  padding-top: 30px;
+  padding-bottom: 30px;
+
 }
 
-.section1 {
-  margin-top: 5px;
+.top-nav .nav_links {
+  list-style: none;
+}
+
+.top-nav .nav_links li {
+  display: inline-block;
+  padding: 0 20px;
+}
+
+.top-nav .nav_links li a {
+  transition: all 0.3s ease 0s;
+}
+
+.top-nav .nav_links li a:hover {
+  color: #0088a9;
+}
+
+.top-nav button {
+  padding: 9px 25px;
+  background-color: rgba(0,136,169,1);
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease 0s;
+  margin-left: 20px;
+}
+
+.top-nav button:hover {
+  background-color: rgba(0,136,169,0.8);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+.side-nav nav {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  height: 100%;
+  left: 0;
+  background: #fff;
+  width: 90px;
+  overflow: hidden;
+  transition: width 0.2s linear;
+  box-shadow: 0 20px 35px rgba(0,0,0,0,0.1);  
+}
+
+.side-nav .logo {
+  text-align: center;
+  display: flex;
+  transition: all 0.5s ease;
+  margin: 10px 0 0 10px;
+}
+
+.side-nav .logo img {
+  width: 45px;
+  height: 45px;
+}
+
+.side-nav .logo span {
+  font-weight: bold;
+  padding: 15px;
+  font-size: 18px;
+  text-transform: uppercase;
+}
+
+.side-nav a {
+  position: relative;
+  color: rgba(85, 83, 83);
+  font-size: 14px;
+  display: table;
+  width: 300px;
+  padding: 10px;
+}
+
+.side-nav .fas {
+  position: relative;
+  width: 70px;
+  height: 40px;
+  top: 14px;
+  font-size: 20px;
+  text-align: center;
+}
+
+.side-nav .nav-item {
+  position: relative;
+  top: 12px;
   margin-left: 10px;
-  flex: 1;
-  background-color: #b91414;
 }
 
-.section2 {
-  margin-top: 5px;
-  margin-left: 10px;
-  flex: 1;
-  background-color: #280ab1;
+.side-nav a:hover {
+  background: #eee;
 }
 
+.side-nav nav:hover {
+  width: 280px;
+  transition: all 0.5s ease;
+}
+
+.side-nav .logout {
+  position: absolute;
+  bottom: 0;
+
+}
+
+.main {
+  margin-left: 90px;
+}
