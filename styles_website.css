@@ -31,7 +31,7 @@ body {
 }
 
 .top-nav header {
-  background-color: rgb(226, 247, 206);
+  background-color: rgb(228, 211, 241);
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -72,17 +72,6 @@ body {
 .top-nav button:hover {
   background-color: rgba(0,136,169,0.8);
 }
-
-
-
-
-
-
-
-
-
-
-
 
 .side-nav nav {
   position: absolute;
@@ -157,4 +146,9 @@ body {
 
 .main {
   margin-left: 90px;
+  height: calc(100vh - 97px);
+  outline-offset: -3px;
+  outline-width: 3px;
+  outline-style: solid;
+  outline-color: orangered;
 }
