@@ -69,3 +69,10 @@ def start_streamlink():
 
 if __name__ == '__main__':
    app.run()
+
+#TODO: Porcess started successfully not launching correctly
+#TODO: Add Twitch API
+#TODO: Implement streamlink native Metadata
+#TODO: Implement Process Watcher and Data extractor
+#TODO: Implement Task lis, Stopper and Relauncher
+#TODO: Implement Custom File Name
