@@ -1,6 +1,6 @@
 $jsonData = @{
     name = "sintica"
-    ads = "true"
+    ads = "false"
     quality = "audio_only"
     time = "false"
 } | ConvertTo-Json
