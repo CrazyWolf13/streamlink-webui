@@ -3,39 +3,65 @@ import subprocess
 import threading
 from datetime import datetime
 import re
+import os
+from concurrent.futures import ThreadPoolExecutor
+
 
 app = Flask(__name__)
 
- 
-@app.route('/', methods=['GET'])
-def index():
-    if request.method == 'GET':
-        return render_template('website.html')
-    
 
 def validate_username(name):
-    # Regular expression pattern for the username validation
-    pattern = r'^\w{3,24}'
-
-        # Check if the username matches the pattern
+    # Regex to check and validate twitch name
+    pattern = r'^\w{3,24}$'
     if re.match(pattern, name):
         return True
     else:
         return False
 
 
+def read_output(stream, logfile):
+    with open(logfile, "a") as log_file:
+        for line in stream:
+            log_file.write(line)
+            log_file.flush()  # Ensure output is immediately written to the file
+            print(line, end='')  # Print the updated line to the terminal
+
 def run_subprocess(command):
-    process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    while True:
-        output = process.stdout.readline()
-        if output == '' and process.poll() is not None:
-            break
-        if output and output.strip():
-            print(output.strip())
+    try:
+        process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+        with open(log_file, "w") as logfile:  # Open log file in write mode to clear its contents
+            logfile.write("started cmd\n")
+
+        # Create separate threads to continuously read from stdout and stderr
+        stdout_thread = threading.Thread(target=read_output, args=(process.stdout, log_file))
+        stderr_thread = threading.Thread(target=read_output, args=(process.stderr, log_file))
+        stdout_thread.start()
+        stderr_thread.start()
+
+        process.wait()
+        if process.returncode != 0:
+            raise subprocess.CalledProcessError(process.returncode, command)
+    except subprocess.CalledProcessError as e:
+        print(f"Command '{e.cmd}' returned non-zero exit status {e.returncode}.")
+        # Handle the error gracefully here, if needed
+
+def execute_command(command):
+    thread = threading.Thread(target=run_subprocess, args=(command,))
+    thread.start()
+    print("starting Thread")
 
 
-    process.wait()
-    return process.pid
+log_file = "output.log"
+
+if os.path.exists(log_file):
+        os.remove(log_file)
+
+ 
+@app.route('/', methods=['GET'])
+def index():
+    if request.method == 'GET':
+        return render_template('website.html')
+
 
 @app.route('/start', methods=['POST'])
 def start_streamlink():
@@ -44,11 +70,8 @@ def start_streamlink():
     data = request.json
     ads = data.get('ads')
     name = data.get('name')
-    if validate_username(name):
-        print(f"{name}: Valid username")
-    else:
+    if not validate_username(name):
         return jsonify({'message': 'Name contains unallowed characters'}), 400
-
     
     #Fetch the time to be included in the file name if choosen.
     time = data.get('time')
@@ -78,14 +101,14 @@ def start_streamlink():
     command.append(" https://www.twitch.tv/")
     command.append(name)
     command.append(f" {quality}")
-    
     full_command = "".join(command)
-    
-    pid = run_subprocess(full_command)
+
+
+
+    execute_command(full_command)
     
 
     print("Other code is running now.....")
-    #TODO: Log Process ID and other data to DB file.
     #print(f"The Command was: {full_command}")
     #print(f"PID is: {pid}")
     #print(f"Name is: {name}")
@@ -101,8 +124,10 @@ def start_streamlink():
 if __name__ == '__main__':
    app.run()
 
+#TODO: Implement DB
+#TODO: Implement PID and Process Watcher
 #TODO: Porcess started successfully not launching correctly
-#TODO: Add Twitch API
+#TODO: Add Twitch API or requests to get the streamer avatar
 #TODO: Implement streamlink native Metadata
 #TODO: Implement Process Watcher and Data extractor
 #TODO: Implement Task lis, Stopper and Relauncher
