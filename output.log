@@ -1,0 +1,7 @@
+started cmd
+[cli][info] Found matching plugin twitch for URL https://www.twitch.tv/bruebie
+[cli][info] Available streams: audio_only, 160p (worst), 360p, 480p, 720p60, 1080p60 (best)
+[cli][info] Opening stream: audio_only (hls)
+[cli][info] Writing output to
+O:\Test\bruebie.mp3
+File O:\Test\bruebie.mp3 already exists! Overwrite it? [y/N] Interrupted! Exiting...
