@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, jsonify, flash
 import subprocess
 import threading
 from datetime import datetime
+import re
 
 app = Flask(__name__)
 
@@ -12,13 +13,15 @@ def index():
         return render_template('website.html')
     
 
-whitelist = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_-1234567890"
+def validate_username(name):
+    # Regular expression pattern for the username validation
+    pattern = r'^\w{3,24}'
 
-def check_name(name):
-    for char in name:
-        if char not in whitelist:
-            return False
-    return True
+        # Check if the username matches the pattern
+    if re.match(pattern, name):
+        return True
+    else:
+        return False
 
 
 def run_subprocess(command):
@@ -41,8 +44,11 @@ def start_streamlink():
     data = request.json
     ads = data.get('ads')
     name = data.get('name')
-    if not check_name(name):
+    if validate_username(name):
+        print(f"{name}: Valid username")
+    else:
         return jsonify({'message': 'Name contains unallowed characters'}), 400
+
     
     #Fetch the time to be included in the file name if choosen.
     time = data.get('time')
@@ -83,7 +89,8 @@ def start_streamlink():
     #print(f"The Command was: {full_command}")
     #print(f"PID is: {pid}")
     #print(f"Name is: {name}")
-    #print(f"Starting Time is: {time_value}")
+    #print(f"Starting Time is: {time_value}") 
+
 
     
     
