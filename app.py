@@ -24,7 +24,7 @@ def read_output(stream, logfile):
         for line in stream:
             log_file.write(line)
             log_file.flush()  # Ensure output is immediately written to the file
-            print(line, end='')  # Print the updated line to the terminal
+            print(prefix, line, end='')  # Print the updated line to the terminal
 
 def run_subprocess(command):
     try:
@@ -51,7 +51,10 @@ def execute_command(command):
     print("starting Thread")
 
 
+
+
 log_file = "output.log"
+prefix = "streamlink: "
 
 if os.path.exists(log_file):
         os.remove(log_file)
@@ -106,13 +109,14 @@ def start_streamlink():
 
 
     execute_command(full_command)
-    
+
 
     print("Other code is running now.....")
     #print(f"The Command was: {full_command}")
     #print(f"PID is: {pid}")
     #print(f"Name is: {name}")
     #print(f"Starting Time is: {time_value}") 
+    #print(f"Filename is {filename}")
 
 
     
