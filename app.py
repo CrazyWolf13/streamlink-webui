@@ -52,7 +52,6 @@ def execute_command(command):
 
 
 
-
 log_file = "output.log"
 prefix = "streamlink: "
 
