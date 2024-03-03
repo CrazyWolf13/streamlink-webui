@@ -1,8 +1,0 @@
-- Streamer Name
-- Time Section
-	- Delay
-	- End-Time
-- output-path
-	- include time
-	- Custom-filename
-- Audio-Only?
