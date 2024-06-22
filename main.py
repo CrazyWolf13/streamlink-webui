@@ -70,41 +70,6 @@ async def streamlink_session(name, url, quality, output_dir, block_ads, filename
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-    # Datenbankverbindung herstellen und Daten einfügen
-    conn = sqlite3.connect('stream_info.db')
-    cursor = conn.cursor()
-    
-    cursor.execute("""
-    INSERT INTO streams (stream_id, name, quality, extension, block_ads, append_time, time_format, time, output_dir, full_url, filename)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    """, (download_task.stream_id, download_task.name, download_task.quality, extension, download_task.block_ads, download_task.append_time, download_task.time_format, time, download_task.output_dir, url, filename))
-    
-    conn.commit()
-    conn.close()
-
-
-
-
-
-
-
-
-
-
-
-
 app = FastAPI()
 
 @app.get("/")
@@ -192,3 +157,16 @@ async def get_stream_info(stream_id: str):
         "download_task_terms": stream_info["download_task_terms"],
         "other_info": stream_info.get("other_info", "Keine weiteren Informationen verfügbar")
     }
+
+
+    # Establish database connection and insert data
+    conn = sqlite3.connect('stream_info.db')
+    cursor = conn.cursor()
+    
+    cursor.execute("""
+    INSERT INTO streams (stream_id, name, quality, extension, block_ads, append_time, time_format, time, output_dir, full_url, filename)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    """, (download_task.stream_id, download_task.name, download_task.quality, extension, download_task.block_ads, download_task.append_time, download_task.time_format, time, download_task.output_dir, url, filename))
+    
+    conn.commit()
+    conn.close()
