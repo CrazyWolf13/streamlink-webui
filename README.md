@@ -1,4 +1,4 @@
-# streamlink_web-ui
-A extremely simple Web-UI for streamlink to download Twitch Livestreams primarly made for my RaspberryPi® but it should work on any device.
-Built using a flask api and a svelte web app
+# streamlink-webui
+An extremely simple Web-UI for streamlink which is capable of downloading Twitch Livestreams.
+Built using _a flask api_ FastAPI 🎉 and a svelte web app
 
