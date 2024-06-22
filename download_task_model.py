@@ -6,7 +6,7 @@ from uuid import uuid4
 
 class download_task(BaseModel):
     name: str
-    url: str = "https://www.twitch.tv/"
+    base_dl_url: str = "https://www.twitch.tv/"
     block_ads: bool = False
     append_time: bool = True
     time_format: str = "%Y.%m.%d.%H.%M"
@@ -20,7 +20,7 @@ class download_task(BaseModel):
             raise ValueError('Invalid username. The username must be 3 to 24 characters long and may only contain letters, numbers and underlines.')
         return v
     
-    @validator('url')
+    @validator('base_dl_url')
     def validate_url(cls, v):
         if not re.match(r'^https?://[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(?:/.*)?$', v):
             raise ValueError('Invalid URL. The URL must be a valid URL.')

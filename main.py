@@ -1,19 +1,19 @@
 import asyncio
-from typing import Union
 from fastapi import FastAPI
 from fastapi import FastAPI, HTTPException
 from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor
-from pydantic import BaseModel, validator
 import tempfile
 from uuid import uuid4
 import re
 import os
 import streamlink
 from pathlib import Path
+
+# Import my functions
 from download_task_model import download_task
 
-# pip install streamlink fastapi uvicorn pydantic starlette alive-progress
+# pip install streamlink fastapi uvicorn pydantic starlette sqlalchemy
 
 # Global dictionary for tracking the current streams
 running_streams = {}
@@ -87,7 +87,7 @@ async def create_stream(download_task: download_task):
     else: extension = ".mp4"
 
     filename = f"{download_task.name}{time}{extension}"
-    url = f"{download_task.url}{download_task.name}"
+    url = f"{download_task.base_dl_url}{download_task.name}"
 
     # start the streamlink session
     asyncio.create_task(run_streamlink_session_in_thread(download_task, filename, url))
@@ -102,7 +102,7 @@ async def create_stream(download_task: download_task):
             "time_format": download_task.time_format,
             "time": time,
             "output_dir": download_task.output_dir,
-            "full_url": f"{download_task.url}{download_task.name}",
+            "full_url": f"{download_task.base_dl_url}{download_task.name}",
             "filename": f"{download_task.name}{time}{extension}"}
 
 
@@ -140,7 +140,7 @@ async def get_stream_list():
 
 
 
-@app.get("/stream_info/{stream_id}")
+@app.get("/stream_info/")
 async def get_stream_info(stream_id: str):
     stream_info = running_streams.get(stream_id)
     if not stream_info:
