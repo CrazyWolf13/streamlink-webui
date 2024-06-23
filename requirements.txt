@@ -1,0 +1,6 @@
+streamlink
+fastapi
+uvicorn
+pydantic
+starlette
+sqlalchemy

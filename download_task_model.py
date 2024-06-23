@@ -9,10 +9,10 @@ class download_task(BaseModel):
     base_dl_url: str = "https://www.twitch.tv/"
     block_ads: bool = False
     append_time: bool = True
-    time_format: str = "%Y.%m.%d.%H.%M"
+    time_format: str = "%Y-%m-%d-%H-%M"
     quality: str = "best"
-    output_dir: str = os.getcwd()
-    stream_id: str = str(uuid4()) 
+    output_dir: str = str(os.getcwd()) + "/downloads"
+    stream_id: str = 0
 
     @validator('name')
     def validate_username(cls, v):
