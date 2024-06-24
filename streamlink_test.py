@@ -1,16 +1,12 @@
 import streamlink
 
-url = "https://twitch.tv/sintica"
-quality = "160p"
+url = "https://twitch.tv/LetsHugoTV"
+stream_quality = "160p"
 
 session = streamlink.Streamlink()
 
-streamlink_options = Options()
-streamlink_options.set("disable_ads", True) 
-streamlink_options.set("quality", quality)
-
 try:
-    session.streamlink(url, options=streamlink_options)
+    session.streamlink(url, disable_ads=True, quality=stream_quality)
     
     with open("./video.mp4", "wb") as f:
         stream_fd = stream.open()
