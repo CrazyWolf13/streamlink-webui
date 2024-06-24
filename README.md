@@ -21,8 +21,8 @@ This project is in early-early alpha, so any reviews, bug reports or feature req
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/yourusername/streamlink-fastapi-service.git
-    cd streamlink-fastapi-service
+    git clone https://github.com/CrazyWolf13/streamlink-webui.git
+    cd streamlink-webui
     ```
 
 2. Install the required packages:
