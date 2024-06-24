@@ -6,10 +6,14 @@ stream_quality = "160p"
 session = streamlink.Streamlink()
 
 try:
-    session.streamlink(url, disable_ads=True, quality=stream_quality)
+    plugin = session.resolve_url(url)
+    plugin.options.set("disable_ads", True) 
+    streamlink.stream(url, stream_quality)
+    
+    streams = streamlink.streams()
     
     with open("./video.mp4", "wb") as f:
-        stream_fd = stream.open()
+        stream_fd = streamlink.open()
         try:
             while True:
                 data = stream_fd.read(1024)
