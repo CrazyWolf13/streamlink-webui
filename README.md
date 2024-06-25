@@ -174,6 +174,21 @@ curl --request GET \
 
 This project is licensed under the BSD 2-Clause License.
 
+[License](./LICENSE)
+
+## License for Included Software
+
+#### Streamlink
+
+This project highly relies on software from the Streamlink project, which is licensed under the BSD 2-Clause License. See below for the full license text:
+[Third-Party-Licenses](./third-party-licenses)
+
+## Acknowledgements
+
+We would like to thank the authors and maintainers of [Streamlink](https://github.com/streamlink/streamlink) for their excellent work at maintaining streamlink. Streamlink is invaluable to our project, and we appreciate your dedication to the open-source community.
+
+Thank you!
+
 ---
 
 Developed by CrazyWolf13 with ❤️

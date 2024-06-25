@@ -3,8 +3,9 @@ import asyncio
 from concurrent.futures import ThreadPoolExecutor
 from sqlalchemy.orm import sessionmaker
 import streamlink
+from streamlink.session import Streamlink
 from streamlink.options import Options
-import tempfile
+from streamlink.exceptions import (StreamlinkError, PluginError, FatalPluginError, NoPluginError, NoStreamsError, StreamError)
 from uuid import uuid4
 import re
 import os
@@ -24,7 +25,7 @@ running_streams = {}
 # Global logging configuration
 Path('./logs').mkdir(exist_ok=True)
 logging.basicConfig(
-    filename=f'./logs/application-{datetime.now()}.log',
+    filename=f'./logs/application-{datetime.now().strftime("%Y-%m-%d__%H-%M-%S")}.log',
     level=logging.DEBUG,
     format='%(asctime)s - %(levelname)s - %(message)s'
 )
@@ -49,76 +50,86 @@ async def run_streamlink_session_in_thread(download_task, filename, url, time):
         except Exception as e:
             logging.error(f"Unexpected error during streamlink session for {download_task.name}: {e}")
 
-async def streamlink_session(name, url, quality, time, output_dir, block_ads, filename, stream_id):
-    session = streamlink.Streamlink()
-    
-    try:
-        plugin_name, plugin_class, _ = session.resolve_url(url)
-    except streamlink.NoPluginError:
-        logging.error(f"No plugin found for URL: {url}")
-        raise HTTPException(status_code=404, detail="No plugin found for the given URL.")
+async def streamlink_session(name, url, quality, time, output_dir, block_ads, filename, stream_id):    
+    try:   
+        # Streamlink session
+        session = Streamlink()
+        if "twitch.tv" in url:
+        # Define Options if a Twitch URL is provided.
+            options = Options()
+            options.set("disable_ads", block_ads)
+            streams = session.streams(url, options)
+            session.set_option("stream-timeout", 30)
+        else:
+            session.set_option("stream-timeout", 30)
+            streams = session.streams(url)
 
-    streams = session.streams(url)
-    if not streams:
-        logging.error(f"No streams found for URL: {url}")
-        raise HTTPException(status_code=404, detail="No streams found.")
+        output_dir = Path(output_dir)
+        Path(output_dir).mkdir(exist_ok=True)
+        filename = filename.replace(":", "-")
+        output_file = output_dir / filename
 
-    stream = streams.get(quality)
-    if not stream:
-        logging.error(f"Desired stream quality '{quality}' not found for URL: {url}")
-        raise HTTPException(status_code=400, detail="Desired stream quality not found.")
-    
-    options = Options()
-    options.set('disable_ads', block_ads)
+        # Create individual logger for each download task
+        task_logger = logging.getLogger(f"download_{stream_id}")
+        task_log_file = f"./logs/{filename.replace('.mp4', '.txt').replace('.mp3', '.txt').replace(':', '-')}"
+        task_handler = logging.FileHandler(task_log_file)
+        task_formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+        task_handler.setFormatter(task_formatter)
+        task_logger.addHandler(task_handler)
+        task_logger.setLevel(logging.DEBUG)
 
-    output_dir = Path(output_dir)
-    Path(output_dir).mkdir(exist_ok=True)
-    filename = filename.replace(":", "-")
-    output_file = output_dir / filename
+        task_logger.info(f"Starting download for {name}")
+        task_logger.info(f"Saving stream to {output_file}")
 
-    # Create individual logger for each download task
-    task_logger = logging.getLogger(f"download_{stream_id}")
-    task_log_file = f"./logs/{filename.replace('.mp4', '.txt').replace('.mp3', '.txt').replace(':', '-')}"
-    task_handler = logging.FileHandler(task_log_file)
-    task_formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-    task_handler.setFormatter(task_formatter)
-    task_logger.addHandler(task_handler)
-    task_logger.setLevel(logging.DEBUG)
-
-    task_logger.info(f"Starting download for {name}")
-    task_logger.info(f"Saving stream to {output_file}")
-
-    with open(output_file, "wb") as f:
-        stream_fd = stream.open()
-        running_streams[stream_id] = stream_fd 
-        try:
-            while True:
-                data = stream_fd.read(1024)
-                if not data:
-                    break
-                f.write(data)
-        finally:
-            stream_fd.close()
-            engine, _, Session = init_db()
-            session = Session()
+        # Start the download
+        with open(output_file, "wb") as f:
+            fd = streams[quality].open()
+            running_streams[stream_id] = fd 
             try:
-                # Search for the download task in the database
-                download_task = session.query(DownloadTask).filter_by(stream_id=stream_id).first()
-                if download_task:
-                    # Update the task in DB with total_time and running=false
-                    download_task.running = False
-                    download_task.total_time = (datetime.now() - download_task.time).total_seconds()
-                    session.commit()
-                    task_logger.info(f"Stream ended or network error {stream_id}")
-                else:
-                    task_logger.error(f"Stream-ID {stream_id} not found in running_streams.")
+                while True:
+                    data = fd.read(1024)
+                    if not data:
+                        break
+                    f.write(data)
             finally:
-                session.close()
-                if stream_id in running_streams:
-                    del running_streams[stream_id]
-                else:
-                    task_logger.error(f"Stream-ID {stream_id} not found in running_streams.")
-            return session
+                fd.close()
+
+                # Update the task in the DB 
+                engine, _, Session = init_db()
+                session = Session()
+                try:
+                    # Search for the download task in the database
+                    download_task = session.query(DownloadTask).filter_by(stream_id=stream_id).first()
+                    if download_task:
+                        # Update the task in DB with total_time and running=false
+                        download_task.running = False
+                        download_task.total_time = (datetime.now() - download_task.time).total_seconds()
+                        session.commit()
+                        task_logger.info(f"Stream ended or network error {stream_id}")
+                    else:
+                        task_logger.error(f"Stream-ID {stream_id} not found in running_streams.")
+                finally:
+                    session.close()
+                    if stream_id in running_streams:
+                        del running_streams[stream_id]
+                    else:
+                        task_logger.error(f"Stream-ID {stream_id} not found in running_streams.")
+    except NoPluginError:
+        print("No suitable plugin found for the provided URL.")
+    except NoStreamsError:
+        print("No streams available for this URL.")
+    except PluginError as e:
+        print(f"Plugin error: {e}")
+    except FatalPluginError as e:
+        print(f"Fatal plugin error: {e}")
+        # Handle the fatal error, perhaps exit the script
+    except StreamError as e:
+        print(f"Stream error: {e}")
+    except StreamlinkError as e:
+        print(f"General Streamlink error: {e}")
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+        return session
 
 
 app = FastAPI()
