@@ -11,7 +11,7 @@ app = Flask(__name__)
 
 
 def validate_username(name):
-    # Regex to check and validate twitch name
+    # Validate twitch username
     pattern = r'^\w{3,24}$'
     if re.match(pattern, name):
         return True
@@ -23,8 +23,8 @@ def read_output(stream, logfile):
     with open(logfile, "a") as log_file:
         for line in stream:
             log_file.write(line)
-            log_file.flush()  # Ensure output is immediately written to the file
-            print(prefix, line, end='')  # Print the updated line to the terminal
+            log_file.flush()  
+            print(prefix, line, end='', flush=True) 
 
 def run_subprocess(command):
     try:
@@ -32,7 +32,7 @@ def run_subprocess(command):
         with open(log_file, "w") as logfile:  # Open log file in write mode to clear its contents
             logfile.write("started cmd\n")
 
-        # Create separate threads to continuously read from stdout and stderr
+        # Thread for stoud and one for stderrr
         stdout_thread = threading.Thread(target=read_output, args=(process.stdout, log_file))
         stderr_thread = threading.Thread(target=read_output, args=(process.stderr, log_file))
         stdout_thread.start()
@@ -43,7 +43,6 @@ def run_subprocess(command):
             raise subprocess.CalledProcessError(process.returncode, command)
     except subprocess.CalledProcessError as e:
         print(f"Command '{e.cmd}' returned non-zero exit status {e.returncode}.")
-        # Handle the error gracefully here, if needed
 
 def execute_command(command):
     thread = threading.Thread(target=run_subprocess, args=(command,))
