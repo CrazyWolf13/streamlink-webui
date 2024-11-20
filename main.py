@@ -1,4 +1,5 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Query
+from fastapi.middleware.cors import CORSMiddleware
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
 from sqlalchemy.orm import sessionmaker
@@ -13,14 +14,19 @@ from pathlib import Path
 from datetime import datetime
 import logging
 import shutil
+from dotenv import load_dotenv
 
 # Import my functions
 from download_task_model import download_task
 from db_schema import init_db, DownloadTask, remove_db, get_running_stream_ids
+from get_avatar import get_access_token, get_user
 
 
 # Global dictionary for tracking the current streams
 running_streams = {}
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Global logging configuration
 Path('./logs').mkdir(exist_ok=True)
@@ -134,6 +140,20 @@ async def streamlink_session(name, url, quality, time, output_dir, block_ads, fi
 
 app = FastAPI()
 
+# CORS-Konfiguration
+origins = ["http://localhost:8080/", "http://localhost:8080", "http://localhost/"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+    expose_headers=["*"],
+)
+
+
+
 @app.get("/")
 async def read_root():
     return {"message": "Currently nothing at '/' consider viewing the /docs or /redoc also look at the readme.md file."}
@@ -181,8 +201,7 @@ async def create_stream(download_task: download_task):
         output_dir=f"{download_task.output_dir}",
         url=f"{url}",
         filename=f"{filename}",
-        running=True,
-        total_time=None
+        running=True
     )
     session.add(download_task_instance)
     session.commit()
@@ -308,9 +327,26 @@ async def get_stream_info(stream_id: str):
             "url": download.url,
             "filename": download.filename,
             "running": download.running,
-            "total_time": download.total
+            "total_time": running_since
         }
         logging.info(f"Information for stream ID {stream_id} retrieved successfully.")
         return download_info
     finally:
         session.close()
+
+
+@app.get("/get_avatar/")
+async def get_avatar(username: str):
+    client_id = os.getenv('CLIENT_ID')
+    client_secret = os.getenv('CLIENT_SECRET')
+
+    access_token = get_access_token(client_id, client_secret)
+    if not access_token:
+        raise HTTPException(status_code=500, detail="Failed to get access token")
+
+    user_data = get_user(username, access_token, client_id)
+    if user_data and 'data' in user_data and len(user_data['data']) > 0:
+        profile_image_url = user_data['data'][0].get('profile_image_url')
+        return {"profile_image_url": profile_image_url}
+    else:
+        raise HTTPException(status_code=404, detail="User not found or no profile image URL available")

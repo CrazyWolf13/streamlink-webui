@@ -20,7 +20,6 @@ class DownloadTask(Base):
     url = Column(String)
     filename = Column(String)
     running = Column(Boolean)
-    total_time = Column(Integer)
 
 def remove_db():
     if os.path.exists("./history.db"):

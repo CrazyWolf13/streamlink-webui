@@ -4,3 +4,5 @@ uvicorn
 pydantic
 starlette
 sqlalchemy
+python-dotenv
+requests
