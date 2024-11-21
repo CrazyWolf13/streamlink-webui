@@ -19,7 +19,7 @@ from dotenv import load_dotenv
 # Import my functions
 from download_task_model import download_task
 from db_schema import init_db, DownloadTask, remove_db, get_running_stream_ids
-from get_avatar import get_access_token, get_user
+from get_twitch_api import get_access_token, get_user
 
 
 # Global dictionary for tracking the current streams
@@ -335,18 +335,43 @@ async def get_stream_info(stream_id: str):
         session.close()
 
 
-@app.get("/get_avatar/")
-async def get_avatar(username: str):
+@app.get("/get_live_status/")
+async def get_live_status(username: str):
+    logging.info(f"Checking live status for username: {username}")
     client_id = os.getenv('CLIENT_ID')
     client_secret = os.getenv('CLIENT_SECRET')
 
     access_token = get_access_token(client_id, client_secret)
     if not access_token:
+        logging.error("Failed to get access token")
         raise HTTPException(status_code=500, detail="Failed to get access token")
 
-    user_data = get_user(username, access_token, client_id)
+    user_data = get_user(username, access_token, client_id, endpoint="streams", param="user_login")
+    if user_data and 'data' in user_data and len(user_data['data']) > 0:
+        stream_data = user_data['data'][0]
+        logging.info(f"User {username} is live with stream data: {stream_data}")
+        return {"live_status": "live", "stream_data": stream_data}
+    else:
+        logging.info(f"User {username} is not live")
+        return {"live_status": "offline"}
+
+
+@app.get("/get_avatar/")
+async def get_avatar(username: str):
+    logging.info(f"Fetching avatar for username: {username}")
+    client_id = os.getenv('CLIENT_ID')
+    client_secret = os.getenv('CLIENT_SECRET')
+
+    access_token = get_access_token(client_id, client_secret)
+    if not access_token:
+        logging.error("Failed to get access token")
+        raise HTTPException(status_code=500, detail="Failed to get access token")
+
+    user_data = get_user(username, access_token, client_id, endpoint="users", param="login")
     if user_data and 'data' in user_data and len(user_data['data']) > 0:
         profile_image_url = user_data['data'][0].get('profile_image_url')
+        logging.info(f"Successfully fetched avatar for username: {username}")
         return {"profile_image_url": profile_image_url}
     else:
+        logging.error(f"User not found or no profile image URL available for username: {username}")
         raise HTTPException(status_code=404, detail="User not found or no profile image URL available")

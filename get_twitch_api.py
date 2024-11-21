@@ -1,5 +1,4 @@
 import requests
-import os
 
 
 def get_access_token(client_id, client_secret):
@@ -18,9 +17,9 @@ def get_access_token(client_id, client_secret):
         return None
 
 
-def get_user(username, access_token, client_id):
-    url = "https://api.twitch.tv/helix/users"
-    params = {"login": username}
+def get_user(username, access_token, client_id, endpoint, param):
+    url = "https://api.twitch.tv/helix/" + endpoint
+    params = {param: username}
     headers = {"Authorization": f"Bearer {access_token}", "Client-Id": client_id}
     try:
         response = requests.get(url, params=params, headers=headers)
