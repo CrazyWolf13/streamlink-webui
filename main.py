@@ -15,6 +15,8 @@ from datetime import datetime
 import logging
 import shutil
 from dotenv import load_dotenv
+from datetime import timedelta
+
 
 # Import my functions
 from download_task_model import download_task
@@ -128,7 +130,6 @@ async def streamlink_session(name, url, quality, time, output_dir, block_ads, fi
         print(f"Plugin error: {e}")
     except FatalPluginError as e:
         print(f"Fatal plugin error: {e}")
-        # Handle the fatal error, perhaps exit the script
     except StreamError as e:
         print(f"Stream error: {e}")
     except StreamlinkError as e:
@@ -136,11 +137,24 @@ async def streamlink_session(name, url, quality, time, output_dir, block_ads, fi
     except Exception as e:
         print(f"Unexpected error: {e}")
         return session
+    
+
+async def check_live_status_periodically(username, schedule_interval, schedule_end, download_task, filename, url, time):
+    while datetime.now() < schedule_end:
+        logging.info(f"Checking live status for username: {username}")
+        live_status = await get_live_status(username)
+        if live_status["live_status"] == "live":
+            logging.info(f"User {username} is live with stream data: {live_status['stream_data']}")
+            # Start the streamlink session in a separate thread
+            asyncio.create_task(run_streamlink_session_in_thread(download_task, filename, url, time))
+            return
+        await asyncio.sleep(schedule_interval * 60)  # Convert minutes to seconds
+    logging.info(f"Schedule end time reached for username: {username}. Stopping live status checks.")
 
 
 app = FastAPI()
 
-# CORS-Konfiguration
+# CORS-Configuration
 origins = ["http://localhost:8080/", "http://localhost:8080", "http://localhost/"]
 
 app.add_middleware(
@@ -201,16 +215,24 @@ async def create_stream(download_task: download_task):
         output_dir=f"{download_task.output_dir}",
         url=f"{url}",
         filename=f"{filename}",
-        running=True
+        running=True,
+        schedule=download_task.schedule,
+        schedule_interval=download_task.schedule_interval,
+        schedule_end=datetime.now() + timedelta(hours=download_task.schedule_end)  # Berechnen Sie schedule_end
     )
     session.add(download_task_instance)
     session.commit()
     session.close()
     logging.info(f"Download task for {download_task.name} added to database.")
 
-    # Start the streamlink session in a separate thread
-    asyncio.create_task(run_streamlink_session_in_thread(download_task, filename, url, time))
-    logging.info(f"Streamlink session initiated for {download_task.name}.")
+    if download_task.schedule:
+        logging.info(f"Stream {download_task.name} scheduled with interval {download_task.schedule_interval} minutes and end time {download_task.schedule_end} hours in the future.")
+        # Start the background process to check live status periodically
+        asyncio.create_task(check_live_status_periodically(download_task.name, download_task.schedule_interval, download_task_instance.schedule_end, download_task, filename, url, time))
+    else:
+        # Start the streamlink session in a separate thread
+        asyncio.create_task(run_streamlink_session_in_thread(download_task, filename, url, time))
+        logging.info(f"Streamlink session initiated for {download_task.name}.")
 
     logging.info(f"Stream creation completed for {download_task.name} with ID {download_task.stream_id}.")
     return {
@@ -221,7 +243,8 @@ async def create_stream(download_task: download_task):
         "block_ads": download_task.block_ads,
         "time": time,
         "full_url": f"{download_task.base_dl_url}{download_task.name}",
-        "path": f"{download_task.output_dir}/{filename}"
+        "path": f"{download_task.output_dir}/{filename}",
+        "schedule": download_task.schedule,
     }
 
 

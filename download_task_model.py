@@ -3,6 +3,7 @@ import os
 import re
 import tempfile
 from uuid import uuid4
+from datetime import datetime
 
 class download_task(BaseModel):
     name: str
@@ -13,6 +14,9 @@ class download_task(BaseModel):
     quality: str = "best"
     output_dir: str = str(os.getcwd()) + "/downloads"
     stream_id: str = 0
+    schedule: bool = False
+    schedule_interval: int = 5
+    schedule_end: int = 12
 
     @validator('name')
     def validate_username(cls, v):
@@ -48,4 +52,23 @@ class download_task(BaseModel):
             temp_file.close()  
         except (PermissionError, OSError) as e:
             raise ValueError(f'Cannot write to output_dir: {e}')
+        return v
+    
+
+    @validator('schedule')
+    def validate_schedule(cls, v):
+        if not isinstance(v, bool):
+            raise ValueError('Invalid schedule. The schedule must be a boolean value.')
+        return v
+
+    @validator('schedule_interval')
+    def validate_schedule_interval(cls, v):
+        if v <= 0:
+            raise ValueError('Invalid schedule_interval. The schedule_interval must be a positive integer.')
+        return v
+
+    @validator('schedule_end')
+    def validate_schedule_end(cls, v):
+        if v <= 0:
+            raise ValueError('Invalid schedule_end. The schedule_end must be a positive integer.')
         return v
