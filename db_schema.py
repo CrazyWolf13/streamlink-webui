@@ -20,10 +20,13 @@ class DownloadTask(Base):
     url = Column(String)
     filename = Column(String)
     running = Column(Boolean)
+    schedule = Column(Boolean)
+    schedule_interval = Column(Integer)
+    schedule_end = Column(Integer)    
 
 def remove_db():
-    if os.path.exists("./history.db"):
-        os.remove("./history.db")
+    if os.path.exists("./application.db"):
+        os.remove("./application.db")
         logging.info("Successfully cleaned up the database.")
         return {"Successfully cleaned up the database."}
     else:
@@ -31,7 +34,7 @@ def remove_db():
         return {"No database file found."}
 
 def init_db():
-    engine = create_engine('sqlite:///./history.db')
+    engine = create_engine('sqlite:///./application.db')
     Base.metadata.create_all(engine)
     Session = sessionmaker(bind=engine)
     logging.info("Database initialized.")
