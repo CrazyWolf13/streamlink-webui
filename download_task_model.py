@@ -5,6 +5,19 @@ import tempfile
 from uuid import uuid4
 from datetime import datetime
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
+# Check if there is a DOWNLOAD_PATH env in the .env file, if not, use the current directory
+if os.getenv("DOWNLOAD_PATH") is not None:
+    # Make sure the path is a real path
+    DOWNLOAD_PATH = os.getenv("DOWNLOAD_PATH")
+    if not os.path.isdir(DOWNLOAD_PATH):
+        raise ValueError('Invalid DOWNLOAD_PATH. The DOWNLOAD_PATH must be a valid directory.')
+else:    
+    DOWNLOAD_PATH = str(os.getcwd()) + "/downloads"
+
 class download_task(BaseModel):
     name: str
     base_dl_url: str = "https://www.twitch.tv/"
@@ -12,7 +25,7 @@ class download_task(BaseModel):
     append_time: bool = True
     time_format: str = "%Y-%m-%d-%H-%M"
     quality: str = "best"
-    output_dir: str = str(os.getcwd()) + "/downloads"
+    output_dir: str = str(DOWNLOAD_PATH)
     stream_id: str = 0
     schedule: bool = False
     schedule_interval: int = 5

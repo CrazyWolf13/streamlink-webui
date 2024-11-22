@@ -11,6 +11,9 @@ This project is in early-early alpha, so any reviews, bug reports or feature req
 - [Streamlink WebUI](#streamlink-webui)
   - [Table of Contents](#table-of-contents)
   - [Features](#features)
+  - [Showcase](#showcase)
+    - [Start job section](#start-job-section)
+    - [Running jobs section](#running-jobs-section)
   - [Installation](#installation)
   - [Configuration](#configuration)
   - [API Endpoints](#api-endpoints)
@@ -24,6 +27,7 @@ This project is in early-early alpha, so any reviews, bug reports or feature req
     - [Get Live Status](#get-live-status)
   - [Usage](#usage)
   - [Logging](#logging)
+  - [Docker Image](#docker-image)
   - [License](#license)
   - [License for Included Software](#license-for-included-software)
       - [Streamlink](#streamlink)
@@ -37,6 +41,15 @@ This project is in early-early alpha, so any reviews, bug reports or feature req
 - View all currently running or scheduled recordings.
 - Display Twitch avatars.
 
+## Showcase
+
+### Start job section
+
+![Showcase Start Recoring Section](./assets/showcase_1.png)
+
+### Running jobs section
+
+![Showcase Running Streams Section](./assets/showcase_2.png)
 
 
 ## Installation
@@ -76,6 +89,7 @@ This project is in early-early alpha, so any reviews, bug reports or feature req
     ```
     CLIENT_ID='your_client_id'
     CLIENT_SECRET='your_client_secret'
+    DOWNLOAD_PATH='/home/<your_username>/Download'
     ```
 
 
@@ -144,6 +158,11 @@ To interact with the API, you can use `curl` commands or even better Insomnia.
 - Logs are created for each download task with detailed information about the streaming and recording process.
 - Global logs are stored in `./logs/application-<date>.log`.
 - Each download task gets its own log file named based on the stream's filename, stored in the `./logs` directory.
+
+
+## Docker Image
+
+Currently there is no docker image as the installation is quite simple and I personally don't user docker if possible, however if there is desire, I may create a Docker Image, just file an Issue with this as a feature Request.
 
 
 ## License 

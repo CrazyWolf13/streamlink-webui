@@ -2,6 +2,7 @@ import requests
 
 
 def get_access_token(client_id, client_secret):
+    # Function to get an acess token from Twitch API
     url = "https://id.twitch.tv/oauth2/token"
     payload = {
         "client_id": client_id,
@@ -18,6 +19,7 @@ def get_access_token(client_id, client_secret):
 
 
 def get_user(username, access_token, client_id, endpoint, param):
+    # fetch data from Twitch API
     url = "https://api.twitch.tv/helix/" + endpoint
     params = {param: username}
     headers = {"Authorization": f"Bearer {access_token}", "Client-Id": client_id}
