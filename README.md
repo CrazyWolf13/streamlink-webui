@@ -2,20 +2,42 @@
 
 This Repository currently contains the API for an application which simplifies the download of Twitch Streams.
 
-In the future a nice web-ui will be added.
+I used a FastAPI backend and a Vue.js frontend.
 
-This project is in early-early alpha, so any reviews, bug reports or feature request are highly desirable.
+This project is in early-early alpha, so any reviews, bug reports or feature request are highly appreciated.
 
 ## Table of Contents
 
-1. [Installation](#installation)
-2. [Configuration](#configuration)
-3. [API Endpoints](#api-endpoints)
-4. [Usage](#usage)
-5. [Logging](#logging)
-6. [Database Management](#database-management)
-7. [Troubleshooting](#troubleshooting)
-8. [License](#license)
+- [Streamlink WebUI](#streamlink-webui)
+  - [Table of Contents](#table-of-contents)
+  - [Features](#features)
+  - [Installation](#installation)
+  - [Configuration](#configuration)
+  - [API Endpoints](#api-endpoints)
+    - [Start a Stream](#start-a-stream)
+    - [Stop All Streams](#stop-all-streams)
+    - [Stop a Specific Stream](#stop-a-specific-stream)
+    - [List All Running Streams](#list-all-running-streams)
+    - [Get Stream Information](#get-stream-information)
+    - [Cleanup Database](#cleanup-database)
+    - [Get Avatar](#get-avatar)
+    - [Get Live Status](#get-live-status)
+  - [Usage](#usage)
+  - [Logging](#logging)
+  - [License](#license)
+  - [License for Included Software](#license-for-included-software)
+      - [Streamlink](#streamlink)
+  - [Acknowledgements](#acknowledgements)
+
+
+## Features
+
+- Use a frontend to record Twitch streams.
+- Schedule recordings to start automatically when a channel goes live.
+- View all currently running or scheduled recordings.
+- Display Twitch avatars.
+
+
 
 ## Installation
 
@@ -35,13 +57,34 @@ This project is in early-early alpha, so any reviews, bug reports or feature req
     fastapi dev main.py
     ```
 
+4. Start the frontend
+    ```bash
+    cd streamlink-webui/frontend
+    npm install
+    yarn serve
+    ```
+
+5. Create a Twitch API Key to fetch live status and user avatars:
+
+  1. Go to the [Twitch Developer Portal](https://dev.twitch.tv/console/apps).
+  2. Sign in if prompted.
+  3. Click on "Register Your Application".
+  4. Provide a name for your app and select "Application Integration".
+  5. Enter `https://localhost` as the OAuth Redirect URL.
+  6. You will receive a Client ID and Client Secret.
+  7. In the root directory of the project, create a `.env` file and add the following:
+    ```
+    CLIENT_ID='your_client_id'
+    CLIENT_SECRET='your_client_secret'
+    ```
+
 
 
 ## Configuration
 
 - The application uses Streamlink to handle the streams.
 - The database is initialized with SQLAlchemy.
-- Logs are stored in the `./logs` directory, and the database schema is managed in `db_schema.py`.
+- Logs are stored in the `./logs` directory, and the database schema is configured in `db_schema.py`.
 
 ## API Endpoints
 
@@ -84,73 +127,17 @@ This project is in early-early alpha, so any reviews, bug reports or feature req
 - **GET** `/cleanup/`
   - Deletes the database and all its contents.
 
+### Get Avatar
+- **GET** `/get_avatar/`
+  - Gets the avatar for a twitch account, uses `username: <twitch_login_name>` as parameter.
+
+### Get Live Status
+- **GET** `/get_live_status/`
+  - Gets the live status of a twitch user, uses `username: <twitch_login_name>` as parameter.
+
 ## Usage
 
-To interact with the API, you can use `curl` commands as shown below:
-
-### Start a Stream
-```bash
-curl --request POST \
-  --url http://127.0.0.1:8000/start/ \
-  --header 'Content-Type: application/json' \
-  --header 'User-Agent: insomnia/9.2.0' \
-  --data '{
-    "name": "Twitch_Channel"
-}'
-```
-
-### Stop All Streams
-```bash
-curl --request POST \
-  --url http://127.0.0.1:8000/stop_all/ \
-  --header 'User-Agent: insomnia/9.2.0'
-```
-
-### Stop a Specific Stream
-```bash
-curl --request POST \
-  --url 'http://127.0.0.1:8000/stop/?stream_id=fd2c40a9-7754-48d9-a74a-5c2235fbd92d' \
-  --header 'Content-Type: application/json' \
-  --header 'User-Agent: insomnia/9.2.0'
-```
-
-### Start a Stream with All Parameters
-```bash
-curl --request POST \
-  --url http://127.0.0.1:8000/start/ \
-  --header 'Content-Type: application/json' \
-  --header 'User-Agent: insomnia/9.2.0' \
-  --data '{
-    "name": "Twitch_Channel",
-    "block_ads": true,
-    "append_time": true,
-    "quality": "best",
-    "time_format": "%Y-%m-%d-%H-%M",
-    "output_dir": "/mnt/downloads",
-    "base_dl_url": "https://twitch.tv"
-}'
-```
-
-### List All Running Streams
-```bash
-curl --request GET \
-  --url http://127.0.0.1:8000/stream_list/ \
-  --header 'User-Agent: insomnia/9.2.0'
-```
-
-### Cleanup Database
-```bash
-curl --request GET \
-  --url http://127.0.0.1:8000/cleanup/ \
-  --header 'User-Agent: insomnia/9.2.0'
-```
-
-### Get Stream Information
-```bash
-curl --request GET \
-  --url 'http://127.0.0.1:8000/stream_info/?stream_id=52fb1923-96a1-4ae9-a08d-b390c85c0eeb' \
-  --header 'User-Agent: insomnia/9.2.0'
-```
+To interact with the API, you can use `curl` commands or even better Insomnia.
 
 ## Logging
 
@@ -158,17 +145,6 @@ curl --request GET \
 - Global logs are stored in `./logs/application-<date>.log`.
 - Each download task gets its own log file named based on the stream's filename, stored in the `./logs` directory.
 
-## Database Management
-
-- The database schema is managed using SQLAlchemy.
-- The database is initialized with `init_db` and can be cleaned up with the `/cleanup/` endpoint.
-- Stream information is stored in the database and can be queried using the `/stream_info/` endpoint.
-
-## Troubleshooting
-
-- Ensure that all necessary packages are installed using `pip install -r requirements.txt`.
-- Make sure to initialize the database before starting the application.
-- Check the logs for detailed error messages and tracebacks.
 
 ## License 
 
@@ -180,7 +156,7 @@ This project is licensed under the BSD 2-Clause License.
 
 #### Streamlink
 
-This project highly relies on software from the Streamlink project, which is licensed under the BSD 2-Clause License. See below for the full license text:
+This project is built upon software from the Streamlink project, which is licensed under the BSD 2-Clause License. See below for the full license text:
 [Third-Party-Licenses](./third-party-licenses)
 
 ## Acknowledgements
