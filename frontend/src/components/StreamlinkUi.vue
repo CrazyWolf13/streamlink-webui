@@ -32,17 +32,16 @@
           </div>
           <div class="form-group">
             <label>Filename:</label>
-            <input type="checkbox" v-model="useDefaultFilename" />
-            Use default filename
-            <div v-if="!useDefaultFilename" class="conditional-options">
-              <input type="checkbox" v-model="includeDate" />
-              Include date in filename
-              <input v-model="startData.customPath" placeholder="Enter custom filename or path" />
-            </div>
+            <input type="checkbox" v-model="startData.append_time" />
+            Append datetime to filename
           </div>
           <div class="form-group">
-            <input type="checkbox" v-model="startData.blockAds" />
+            <input type="checkbox" v-model="startData.block_ads" />
             Block ads
+          </div>
+          <div class="form-group">
+            <input type="checkbox" v-model="startData.schedule" />
+            Schedule
           </div>
           <StyledButton :clickHandler="startStream">Start</StyledButton>
         </div>
@@ -55,6 +54,9 @@
           <div v-else>
             <div class="streams-container">
               <div v-for="stream in detailedStreams" :key="stream.stream_id" class="stream-box">
+                <div class="scheduled-icon-container invisible">
+                  <i class="fas fa-hourglass-half scheduled-icon"></i>
+                </div>
                 <div class="stream-info">
                   <h3>
                     <a :href="stream.url" target="_blank">{{ stream.name }}</a>
@@ -62,6 +64,31 @@
                   <p><strong>Stream ID:</strong> {{ stream.stream_id }}</p>
                   <p><strong>Quality:</strong> {{ stream.quality }}</p>
                   <p><strong>Running Since:</strong> {{ formatRunningTime(stream.running_since) }}</p>
+                  <p><strong>Filename:</strong> {{ stream.filename }}</p>
+                  <p><strong>Output Directory:</strong> {{ stream.output_dir }}</p>
+                  <p><strong>Block Ads:</strong> {{ stream.block_ads ? "Yes" : "No" }}</p>
+                  <p><strong>Status:</strong> {{ stream.running ? "Running" : "Stopped" }}</p>
+                </div>
+                <div class="profile-image-container">
+                  <a :href="stream.url" target="_blank">
+                    <img :src="stream.profile_image_url" alt="Profile Image" class="profile-image" />
+                  </a>
+                </div>
+                <button @click="terminateStream(stream.stream_id)" class="terminate-btn" title="Terminate">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+              <div v-for="stream in scheduledStreams" :key="stream.stream_id" class="stream-box">
+                <div class="scheduled-icon-container">
+                  <i class="fas fa-hourglass-half scheduled-icon"></i>
+                </div>
+                <div class="stream-info">
+                  <h3>
+                    <a :href="stream.url" target="_blank">{{ stream.name }}</a>
+                  </h3>
+                  <p><strong>Stream ID:</strong> {{ stream.stream_id }}</p>
+                  <p><strong>Quality:</strong> {{ stream.quality }}</p>
+                  <p><strong>Scheduled:</strong> Yes</p>
                   <p><strong>Filename:</strong> {{ stream.filename }}</p>
                   <p><strong>Output Directory:</strong> {{ stream.output_dir }}</p>
                   <p><strong>Block Ads:</strong> {{ stream.block_ads ? "Yes" : "No" }}</p>
@@ -104,27 +131,27 @@ export default {
       currentView: 'start', // Default view
       startData: {
         name: '',
-        quality: 'audio_only',
-        customPath: '',
-        blockAds: false,
+        quality: 'best',
+        block_ads: true,
+        append_time: true,
+        schedule: false,
       },
-      useDefaultFilename: true,
-      includeDate: false,
       runningStreams: [], // Raw stream IDs from /api/stream_list
       detailedStreams: [], // Detailed data from /api/stream_info
+      scheduledStreams: [], // Detailed data for scheduled streams
       streamsLoading: false, // Loading state for the Running Streams view
     };
   },
   methods: {
     async startStream() {
       const payload = {
-        ...this.startData,
-        customPath: this.useDefaultFilename
-          ? null
-          : this.includeDate
-          ? `${this.startData.customPath}_DATE`
-          : this.startData.customPath,
+        name: this.startData.name || '',
+        quality: this.startData.quality || 'best',
+        block_ads: !!this.startData.block_ads,
+        append_time: !!this.startData.append_time, 
+        schedule: !!this.startData.schedule,
       };
+
       try {
         const response = await axios.post('/api/start', payload);
         alert(`Stream started: ${response.data.message}`);
@@ -133,6 +160,7 @@ export default {
         alert('Failed to start the stream.');
       }
     },
+
     async terminateStream(stream_id) {
       const confirmation = window.confirm('Are you sure you want to terminate this stream?');
       if (confirmation) {
@@ -165,20 +193,38 @@ export default {
     async fetchRunningStreams() {
       this.streamsLoading = true; // Show loading state
       try {
-        // Fetch the list of running streams
+        // Fetch the list of running and scheduled streams
         const listResponse = await axios.get('/api/stream_list');
-        const streamIds = listResponse.data.running_streams;
+        const runningStreamIds = listResponse.data.running_streams;
+        const scheduledStreamIds = listResponse.data.scheduled_streams;
 
-        // Fetch details for each stream ID
-        const detailsPromises = streamIds.map((id) =>
+        // Fetch details for each running stream ID
+        const runningDetailsPromises = runningStreamIds.map((id) =>
           axios.get(`/api/stream_info?stream_id=${id}`)
         );
 
-        const detailsResponses = await Promise.all(detailsPromises);
+        const runningDetailsResponses = await Promise.all(runningDetailsPromises);
 
-        // Extract detailed stream information
+        // Extract detailed running stream information
         this.detailedStreams = await Promise.all(
-          detailsResponses.map(async (res) => {
+          runningDetailsResponses.map(async (res) => {
+            const stream = res.data;
+            const avatarResponse = await axios.get(`/api/get_avatar?username=${stream.name}`);
+            stream.profile_image_url = avatarResponse.data.profile_image_url;
+            return stream;
+          })
+        );
+
+        // Fetch details for each scheduled stream ID
+        const scheduledDetailsPromises = scheduledStreamIds.map((id) =>
+          axios.get(`/api/stream_info?stream_id=${id}`)
+        );
+
+        const scheduledDetailsResponses = await Promise.all(scheduledDetailsPromises);
+
+        // Extract detailed scheduled stream information
+        this.scheduledStreams = await Promise.all(
+          scheduledDetailsResponses.map(async (res) => {
             const stream = res.data;
             const avatarResponse = await axios.get(`/api/get_avatar?username=${stream.name}`);
             stream.profile_image_url = avatarResponse.data.profile_image_url;
@@ -279,6 +325,12 @@ body {
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+
+  /* Ensure the content can scroll vertically when needed */
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column; /* Stack children vertically */
+  height: calc(100vh - 40px); /* Ensure it fits within viewport */
 }
 
 /* Form Styles */
@@ -341,10 +393,36 @@ select {
   transform: scale(1.1); 
 }
 
+.stream-box .scheduled-icon-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 10vw;
+}
+
+.stream-box .scheduled-icon {
+  font-size: 2.5vw;
+  color: var(--twitch-purple);
+  transition: transform 0.2s ease-in-out;
+}
+
+.stream-box .scheduled-icon:hover {
+  transform: scale(1.1); 
+}
+
+.stream-box .scheduled-icon-container.invisible {
+  visibility: hidden;
+}
+
 .streams-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
   gap: 20px;
+
+  /* Ensure grid scales properly */
+  flex-grow: 1; 
+  overflow-y: auto; /* Enable vertical scroll if the grid overflows */
+  max-height: calc(100vh - 140px); /* Adjust for header/buttons */
 }
 
 button {

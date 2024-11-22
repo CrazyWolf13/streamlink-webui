@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <h1>Streamlink-UI</h1>
+    <h1>Streamlink-Web-UI</h1>
     <StreamlinkUi />
   </div>
 </template>

@@ -26,17 +26,21 @@ from get_twitch_api import get_access_token, get_user
 
 # Global dictionary for tracking the current streams
 running_streams = {}
+scheduled_streams = []
 
 # Load environment variables from .env file
 load_dotenv()
 
 # Global logging configuration
 Path('./logs').mkdir(exist_ok=True)
+logging_filename=f'./logs/application-{datetime.now().strftime("%Y-%m-%d__%H-%M-%S")}.log'
 logging.basicConfig(
-    filename=f'./logs/application-{datetime.now().strftime("%Y-%m-%d__%H-%M-%S")}.log',
+    filename=logging_filename,
     level=logging.DEBUG,
     format='%(asctime)s - %(levelname)s - %(message)s'
 )
+
+
 
 def calculate_running_since(start_time):
     now = datetime.now()
@@ -140,18 +144,26 @@ async def streamlink_session(name, url, quality, time, output_dir, block_ads, fi
     
 
 async def check_live_status_periodically(username, schedule_interval, schedule_end, download_task, filename, url, time):
+    # Stellen Sie sicher, dass schedule_end ein datetime-Objekt ist
+    if isinstance(schedule_end, str):
+        schedule_end = datetime.fromisoformat(schedule_end)
+
     while datetime.now() < schedule_end:
         logging.info(f"Checking live status for username: {username}")
         live_status = await get_live_status(username)
         if live_status["live_status"] == "live":
             logging.info(f"User {username} is live with stream data: {live_status['stream_data']}")
+            # Remove the stream_id from the scheduled_streams list
+            if download_task.stream_id in scheduled_streams:
+                scheduled_streams.remove(download_task.stream_id)
             # Start the streamlink session in a separate thread
             asyncio.create_task(run_streamlink_session_in_thread(download_task, filename, url, time))
             return
         await asyncio.sleep(schedule_interval * 60)  # Convert minutes to seconds
     logging.info(f"Schedule end time reached for username: {username}. Stopping live status checks.")
-
-
+    # Remove the stream_id from the scheduled_streams list
+    if download_task.stream_id in scheduled_streams:
+        scheduled_streams.remove(download_task.stream_id)
 app = FastAPI()
 
 # CORS-Configuration
@@ -177,19 +189,20 @@ async def read_root():
 @app.post("/start/")
 async def create_stream(download_task: download_task):
     logging.info(f"Start creating stream for {download_task.name}")
-
-    if download_task.append_time:
-        time_str = datetime.now().strftime(download_task.time_format)
-        time = datetime.strptime(time_str, download_task.time_format)
-        logging.info(f"Appending time to filename using format {download_task.time_format}: {time_str}")
-    else:
-        time = ""
-        logging.info("No time appending requested.")
+    time_str = datetime.now().strftime(download_task.time_format)
+    time = datetime.strptime(time_str, download_task.time_format)
 
     extension = ".mp3" if download_task.quality == "audio_only" else ".mp4"
     logging.info(f"Selected file extension based on quality {download_task.quality}: {extension}")
 
-    filename = f"{download_task.name}__{time}{extension}"
+    # Construct the filename
+    if download_task.append_time:
+        filename = f"{download_task.name}__{time}{extension}"
+        logging.info(f"Appending time to filename using format {download_task.time_format}: {time_str}")
+    else:
+        filename = f"{download_task.name}{extension}"
+        logging.info("No time appending requested.")
+
     url = f"{download_task.base_dl_url}{download_task.name}"
     logging.info(f"Constructed filename: {filename} and URL: {url}")
 
@@ -203,6 +216,7 @@ async def create_stream(download_task: download_task):
     logging.info("Database session initialized.")
 
     # Add the download task to the database
+    schedule_end_time = datetime.now() + timedelta(hours=download_task.schedule_end)
     download_task_instance = DownloadTask(
         stream_id=f"{download_task.stream_id}",
         name=f"{download_task.name}",
@@ -218,17 +232,24 @@ async def create_stream(download_task: download_task):
         running=True,
         schedule=download_task.schedule,
         schedule_interval=download_task.schedule_interval,
-        schedule_end=datetime.now() + timedelta(hours=download_task.schedule_end)  # Berechnen Sie schedule_end
+        schedule_end=schedule_end_time  # Berechnen Sie schedule_end
     )
     session.add(download_task_instance)
     session.commit()
+
+    # Extrahieren Sie die benötigten Attribute, bevor die Session geschlossen wird
+    schedule_interval = download_task_instance.schedule_interval
+    schedule_end = download_task_instance.schedule_end
+
     session.close()
     logging.info(f"Download task for {download_task.name} added to database.")
 
     if download_task.schedule:
-        logging.info(f"Stream {download_task.name} scheduled with interval {download_task.schedule_interval} minutes and end time {download_task.schedule_end} hours in the future.")
+        logging.info(f"Stream {download_task.name} scheduled with interval {schedule_interval} minutes and end time {schedule_end}.")
+        # Add the stream_id to the scheduled_streams list
+        scheduled_streams.append(download_task.stream_id)
         # Start the background process to check live status periodically
-        asyncio.create_task(check_live_status_periodically(download_task.name, download_task.schedule_interval, download_task_instance.schedule_end, download_task, filename, url, time))
+        asyncio.create_task(check_live_status_periodically(download_task.name, schedule_interval, schedule_end, download_task, filename, url, time))
     else:
         # Start the streamlink session in a separate thread
         asyncio.create_task(run_streamlink_session_in_thread(download_task, filename, url, time))
@@ -293,11 +314,16 @@ async def cleanup_db():
         logging.error(f"Error when deleting the database: {e}")
         result = False
     try:
-        # Attempt to remove the 'logs' directory
-        shutil.rmtree("./logs/")
-        logging.info("'logs' directory successfully removed.")
+        # Attempt to remove all files in the 'logs' directory except the current log file
+        for log_file in Path("./logs/").glob("*"):
+            if log_file.name != Path(logging_filename).name:
+                try:
+                    log_file.unlink()
+                except Exception as e:
+                    logging.error(f"Error when removing log file {log_file}: {e}")
+        logging.info("Old log files successfully removed.")
     except Exception as e:
-        logging.error(f"Error when removing the 'logs' directory: {e}")
+        logging.error(f"Error when removing old log files: {e}")
         result = False
     try:
         # Attempt to remove the 'downloads' directory
@@ -321,8 +347,8 @@ async def get_stream_list():
     logging.info("Listing all running streams...")
     running_streams_list = list(running_streams.keys())
     logging.info(f"Total running streams: {len(running_streams_list)}")
-    return {"running_streams": running_streams_list}
-
+    logging.info(f"Total scheduled streams: {len(scheduled_streams)}")
+    return {"running_streams": running_streams_list, "scheduled_streams": scheduled_streams}
 
 
 @app.get("/stream_info/")

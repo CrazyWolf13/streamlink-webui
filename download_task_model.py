@@ -53,7 +53,6 @@ class download_task(BaseModel):
         except (PermissionError, OSError) as e:
             raise ValueError(f'Cannot write to output_dir: {e}')
         return v
-    
 
     @validator('schedule')
     def validate_schedule(cls, v):

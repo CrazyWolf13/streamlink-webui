@@ -50,5 +50,3 @@ async def get_running_stream_ids():
         return running_stream_ids
     finally:
         session.close()
-
-
