@@ -74,7 +74,8 @@ This project is in early-early alpha, so any reviews, bug reports or feature req
     ```bash
     cd streamlink-webui/frontend
     npm install
-    npm run serve
+    npm install yarn
+    yarn serve
     ```
 
 5. Create a Twitch API Key to fetch live status and user avatars:
