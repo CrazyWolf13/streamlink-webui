@@ -15,36 +15,53 @@
         <!-- Start Stream -->
         <div v-if="currentView === 'start'">
           <h2>Start a Stream</h2>
-          <div class="form-group">
+          <div class="form-group channel-name-container">
             <label>Channel Name:</label>
-            <input v-model="startData.name" placeholder="Enter Channel Name" />
+            <div class="channel-input-avatar">
+              <input v-model="startData.name" placeholder="Enter Channel Name" />
+              <StyledButton :clickHandler="fetchLiveStatus" class="small-button">Check Live Status</StyledButton>
+              <div class="avatar-container">
+                <div v-if="!avatarUrl">
+                  <!-- SVG fallback-->
+                  <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="10" fill="#4d4d4d" />
+                  </svg>
+                </div>
+              <div v-else>
+                <!-- profile image  -->
+                <img :src="avatarUrl" alt="Profile Image" class="profile-image-small" />
+                <div class="status-indicator" :class="{ 'status-online': isUserLive, 'status-offline': !isUserLive }"></div>
+              </div>
+            </div>
           </div>
-          <div class="form-group">
-            <label>Quality:</label>
-            <select v-model="startData.quality">
-              <option value="audio_only">Audio Only</option>
-              <option value="best">Best</option>
-              <option value="720p">720p</option>
-              <option value="480p">480p</option>
-              <option value="360p">360p</option>
-              <option value="160p">160p</option>
-            </select>
+            <div class="form-group">
+              <label>Quality:</label>
+              <select v-model="startData.quality">
+                <option value="audio_only">Audio Only</option>
+                <option value="best">Best</option>
+                <option value="720p">720p</option>
+                <option value="480p">480p</option>
+                <option value="360p">360p</option>
+                <option value="160p">160p</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Filename:</label>
+              <input type="checkbox" v-model="startData.append_time" />
+              Append datetime to filename
+            </div>
+            <div class="form-group">
+              <input type="checkbox" v-model="startData.block_ads" />
+              Block ads
+            </div>
+            <div class="form-group">
+              <input type="checkbox" v-model="startData.schedule" />
+              Schedule
+            </div>
+            <StyledButton :clickHandler="startStream">Start</StyledButton>
           </div>
-          <div class="form-group">
-            <label>Filename:</label>
-            <input type="checkbox" v-model="startData.append_time" />
-            Append datetime to filename
-          </div>
-          <div class="form-group">
-            <input type="checkbox" v-model="startData.block_ads" />
-            Block ads
-          </div>
-          <div class="form-group">
-            <input type="checkbox" v-model="startData.schedule" />
-            Schedule
-          </div>
-          <StyledButton :clickHandler="startStream">Start</StyledButton>
         </div>
+
 
         <!-- Running Streams -->
         <div v-if="currentView === 'list'">
@@ -120,6 +137,7 @@
   </div>
 </template>
 
+
 <script>
 import StyledButton from './StyledButton.vue';
 import axios from 'axios';
@@ -128,7 +146,7 @@ export default {
   components: { StyledButton },
   data() {
     return {
-      currentView: 'start', // Default view
+      currentView: 'start',
       startData: {
         name: '',
         quality: 'best',
@@ -136,10 +154,13 @@ export default {
         append_time: true,
         schedule: false,
       },
-      runningStreams: [], // Raw stream IDs from /api/stream_list
-      detailedStreams: [], // Detailed data from /api/stream_info
-      scheduledStreams: [], // Detailed data for scheduled streams
-      streamsLoading: false, // Loading state for the Running Streams view
+      liveStatusUsername: '', 
+      avatarUrl: null, 
+      isUserLive: false, 
+      runningStreams: [], 
+      detailedStreams: [], 
+      scheduledStreams: [], 
+      streamsLoading: false, 
     };
   },
   methods: {
@@ -161,13 +182,41 @@ export default {
       }
     },
 
+    async fetchLiveStatus() {
+      if (!this.startData.name.trim()) {
+        alert('Please enter a username.');
+        return;
+      }
+
+      try {
+        const response = await axios.get(`/api/get_live_status?username=${this.startData.name}`);
+        const liveStatus = response.data.live_status;
+
+        if (liveStatus === 'live') {
+          this.isUserLive = true;
+        } else if (liveStatus === 'offline') {
+          this.isUserLive = false;
+        } else {
+          throw new Error('Unexpected response format.');
+        }
+
+        // Fetch avatar image
+        const avatarResponse = await axios.get(`/api/get_avatar?username=${this.startData.name}`);
+        this.avatarUrl = avatarResponse.data.profile_image_url;
+
+      } catch (error) {
+        console.error('Error fetching live status:', error);
+        alert('Failed to fetch live status or avatar.');
+      }
+    },
+
     async terminateStream(stream_id) {
       const confirmation = window.confirm('Are you sure you want to terminate this stream?');
       if (confirmation) {
         try {
           const response = await axios.post(`/api/stop?stream_id=${stream_id}`);
           alert(`Stream terminated: ${response.data.message}`);
-          this.fetchRunningStreams(); // Refresh the list after termination
+          this.fetchRunningStreams(); // reload
         } catch (error) {
           console.error(error);
           alert('Failed to terminate the stream.');
@@ -177,23 +226,23 @@ export default {
     async confirmTerminateAllStreams() {
       const confirmation = window.confirm('Are you sure you want to terminate all streams?');
       if (confirmation) {
-        this.terminateAllStreams();
+        this.terminateAllStreams(); // terminate all streams
       }
     },
     async terminateAllStreams() {
       try {
         const response = await axios.post('/api/stop_all');
         alert(`All streams terminated: ${response.data.message}`);
-        this.fetchRunningStreams(); // Refresh the list after termination
+        this.fetchRunningStreams(); //reload
       } catch (error) {
         console.error(error);
         alert('Failed to terminate all streams.');
       }
     },
     async fetchRunningStreams() {
-      this.streamsLoading = true; // Show loading state
+      this.streamsLoading = true; // Show loading screen
       try {
-        // Fetch the list of running and scheduled streams
+        // Fetch all running and scheduled stream IDs
         const listResponse = await axios.get('/api/stream_list');
         const runningStreamIds = listResponse.data.running_streams;
         const scheduledStreamIds = listResponse.data.scheduled_streams;
@@ -205,7 +254,7 @@ export default {
 
         const runningDetailsResponses = await Promise.all(runningDetailsPromises);
 
-        // Extract detailed running stream information
+        // Extract data from each response
         this.detailedStreams = await Promise.all(
           runningDetailsResponses.map(async (res) => {
             const stream = res.data;
@@ -222,7 +271,7 @@ export default {
 
         const scheduledDetailsResponses = await Promise.all(scheduledDetailsPromises);
 
-        // Extract detailed scheduled stream information
+        // Extract detailed stream info
         this.scheduledStreams = await Promise.all(
           scheduledDetailsResponses.map(async (res) => {
             const stream = res.data;
@@ -235,7 +284,7 @@ export default {
         console.error(error);
         alert('Failed to fetch running streams.');
       } finally {
-        this.streamsLoading = false; // Hide loading state
+        this.streamsLoading = false;
       }
     },
     handleRunningStreamsClick() {
@@ -268,7 +317,6 @@ export default {
 </script>
 
 <style scoped>
-/* Colors */
 :root {
   --twitch-purple: #9146ff;
   --dark-grey: #2d2d2d;
@@ -283,7 +331,7 @@ body {
   background-color: var(--dark-background);
 }
 
-/* Overall Layout */
+/* Layout */
 .container {
   display: flex;
   height: 100vh;
@@ -325,12 +373,10 @@ body {
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-
-  /* Ensure the content can scroll vertically when needed */
   overflow-y: auto;
   display: flex;
-  flex-direction: column; /* Stack children vertically */
-  height: calc(100vh - 40px); /* Ensure it fits within viewport */
+  flex-direction: column;
+  height: calc(100vh - 40px); 
 }
 
 /* Form Styles */
@@ -418,11 +464,9 @@ select {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
   gap: 20px;
-
-  /* Ensure grid scales properly */
   flex-grow: 1; 
-  overflow-y: auto; /* Enable vertical scroll if the grid overflows */
-  max-height: calc(100vh - 140px); /* Adjust for header/buttons */
+  overflow-y: auto; 
+  max-height: calc(100vh - 140px); 
 }
 
 button {
@@ -479,5 +523,67 @@ button i {
 
 .terminate-all-btn:hover {
   background-color: red;
+}
+
+/* Smaller version of styled button */
+.small-button {
+  width: 10vw;
+}
+
+/* Avatar Container */
+.avatar-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.avatar-container svg {
+  width: 10vw;
+  height: 10vw;
+}
+
+.profile-image-small {
+  width: 10vw; 
+  height: 10vw;
+  border-radius: 50%;
+  border: 2px solid var(--white);
+}
+
+/* Status Indicator */
+.status-indicator {
+  width: 1vw;
+  height: 1vw;
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  border: 2px solid var(--dark-grey);
+  border-radius: 50%;
+}
+
+.status-online {
+  background-color: #4caf50;
+}
+
+.status-offline {
+  background-color: #d9534f;
+}
+
+.channel-name-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.channel-input-avatar {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.channel-input-avatar input {
+  flex: 1;
+  width: auto;
+  max-width: 60vw; 
 }
   </style>
