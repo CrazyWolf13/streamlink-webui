@@ -86,13 +86,11 @@ This project is in early-early alpha, so any reviews, bug reports or feature req
   5. Enter `https://localhost` as the OAuth Redirect URL.
   6. You will receive a Client ID and Client Secret.
   7. In the root directory of the project, create a `.env` file and add the following:
-    ```
-    CLIENT_ID='your_client_id'
-    CLIENT_SECRET='your_client_secret'
-    DOWNLOAD_PATH='/home/<your_username>/Download'
-    ```
-
-
+```
+CLIENT_ID='your_client_id'
+CLIENT_SECRET='your_client_secret'
+DOWNLOAD_PATH='/home/<your_username>/Download'
+```
 
 ## Configuration
 
