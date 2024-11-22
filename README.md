@@ -74,7 +74,7 @@ This project is in early-early alpha, so any reviews, bug reports or feature req
     ```bash
     cd streamlink-webui/frontend
     npm install
-    npm install yarn
+    npm install -g yarn
     yarn serve
     ```
 
