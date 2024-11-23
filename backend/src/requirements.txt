@@ -6,3 +6,4 @@ starlette
 sqlalchemy
 python-dotenv
 requests
+fastapi[standard]
