@@ -19,7 +19,7 @@ COPY /backend/src/ ./
 
 COPY --from=frontend-builder /app/frontend/ /app/frontend/
 
-EXPOSE 8080
+EXPOSE 8000
 
 # Run backend and frontend with concurrently
 CMD ["fastapi", "run", "main.py"]
