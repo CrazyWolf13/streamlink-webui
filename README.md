@@ -52,12 +52,18 @@ This project is in early-early alpha, so any reviews, bug reports or feature req
 ![Showcase Running Streams Section](./assets/showcase_2.png)
 
 
-## Installation
+# Installation
+
+## Docker
+
+
+
+## Bare Metal
 
 1. Clone the repository:
     ```bash
     git clone https://github.com/CrazyWolf13/streamlink-webui.git
-    cd streamlink-webui
+    cd streamlink-webui/backend/src
     ```
 
 2. Install the required packages:
@@ -65,20 +71,15 @@ This project is in early-early alpha, so any reviews, bug reports or feature req
     pip install -r requirements.txt
     ```
 
-3. Run FastAPI:
+3. Build the frontend
     ```bash
-    fastapi dev main.py
-    ```
-
-4. Start the frontend
-    ```bash
-    cd streamlink-webui/frontend
+    cd ../../frontend/src
     npm install
     npm install -g yarn
-    yarn serve
+    yarn build
     ```
 
-5. Create a Twitch API Key to fetch live status and user avatars:
+4. Create a Twitch API Key to fetch live status and user avatars:
 
   1. Go to the [Twitch Developer Portal](https://dev.twitch.tv/console/apps).
   2. Sign in if prompted.
@@ -93,6 +94,12 @@ CLIENT_SECRET='your_client_secret'
 DOWNLOAD_PATH='/home/<your_username>/Download'
 ```
 
+5. Run FastAPI:
+    ```bash
+    cd ../../backend/src
+    fastapi run main.py
+    ```
+
 ## Configuration
 
 - The application uses Streamlink to handle the streams.
@@ -101,67 +108,13 @@ DOWNLOAD_PATH='/home/<your_username>/Download'
 
 ## API Endpoints
 
-### Start a Stream
-- **POST** `/api/v1/start/`
-  - Starts a new stream and saves it to the specified output directory.
-  - Request body: JSON
-  - Example Request:
-    ```json
-    {
-      "name": "Twitch_Channel",
-      "block_ads": true,
-      "append_time": true,
-      "quality": "best",
-      "time_format": "%Y-%m-%d-%H-%M",
-      "output_dir": "/mnt/downloads",
-      "base_dl_url": "https://twitch.tv"
-    }
-    ```
-
-### Stop All Streams
-- **POST** `/api/v1/stop_all/`
-  - Stops all currently running streams.
-  
-### Stop a Specific Stream
-- **POST** `/api/v1/stop/`
-  - Stops a specific stream by `stream_id`.
-  - Query parameter: `stream_id` (UUID)
-
-### List All Running Streams
-- **GET** `/api/v1/stream_list/`
-  - Returns a list of all running streams.
-
-### Get Stream Information
-- **GET** `/api/v1/stream_info/`
-  - Retrieves information for a specific stream.
-  - Query parameter: `stream_id` (UUID)
-
-### Cleanup Database
-- **GET** `/api/v1/cleanup/`
-  - Deletes the database and all its contents.
-
-### Get Avatar
-- **GET** `/api/v1/get_avatar/`
-  - Gets the avatar for a twitch account, uses `username: <twitch_login_name>` as parameter.
-
-### Get Live Status
-- **GET** `/api/v1/get_live_status/`
-  - Gets the live status of a twitch user, uses `username: <twitch_login_name>` as parameter.
-
-## Usage
-
-To interact with the API, you can use `curl` commands or even better Insomnia.
+Visit /docs endpoint to get an overview of all api endpoints and how to use them.
 
 ## Logging
 
 - Logs are created for each download task with detailed information about the streaming and recording process.
 - Global logs are stored in `./logs/application-<date>.log`.
 - Each download task gets its own log file named based on the stream's filename, stored in the `./logs` directory.
-
-
-## Docker Image
-
-Currently there is no docker image as the installation is quite simple and I personally don't user docker if possible, however if there is desire, I may create a Docker Image, just file an Issue with this as a feature Request.
 
 
 ## License 
