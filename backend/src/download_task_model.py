@@ -16,7 +16,10 @@ if os.getenv("DOWNLOAD_PATH") is not None:
     if not os.path.isdir(DOWNLOAD_PATH):
         raise ValueError('Invalid DOWNLOAD_PATH. The DOWNLOAD_PATH must be a valid directory.')
 else:    
-    DOWNLOAD_PATH = str(os.getcwd()) + "../../../downloads"
+    # Create downloads folder in project root
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    project_root = os.path.abspath(os.path.join(current_dir, "../../"))
+    DOWNLOAD_PATH = os.path.join(project_root, "downloads")
 
 class download_task(BaseModel):
     name: str
