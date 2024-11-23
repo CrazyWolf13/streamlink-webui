@@ -179,13 +179,13 @@ app.add_middleware(
 
 
 
-@app.get("/")
+@app.get("/api/v1/")
 async def read_root():
     return {"message": "Currently nothing at '/' consider viewing the /docs or /redoc also look at the readme.md file."}
 
 
 
-@app.post("/start/")
+@app.post("/api/v1/start/")
 async def create_stream(download_task: download_task):
     logging.info(f"Start creating stream for {download_task.name}")
 
@@ -268,7 +268,7 @@ async def create_stream(download_task: download_task):
     }
 
 
-@app.post("/stop_all/")
+@app.post("/api/v1/stop_all/")
 async def stop_all_streams():
     # Stop all running streams
     logging.info("Stopping all streams...")
@@ -286,7 +286,7 @@ async def stop_all_streams():
 
 
 
-@app.post("/stop/")
+@app.post("/api/v1/stop/")
 async def stop_stream(stream_id: str):
     # Check and stop a scheduled stream
     if stream_id in scheduled_streams:
@@ -312,7 +312,7 @@ async def stop_stream(stream_id: str):
         raise HTTPException(status_code=404, detail=f"Stream {stream_id} not found.")
 
 
-@app.get("/cleanup/")
+@app.get("/api/v1/cleanup/")
 async def cleanup_db():
     logging.info("Cleaning up...")
     try:
@@ -343,7 +343,7 @@ async def cleanup_db():
 
 
 
-@app.get("/stream_list/")
+@app.get("/api/v1/stream_list/")
 async def get_stream_list():
     # List all running streams
     logging.info("Listing all running streams...")
@@ -353,7 +353,7 @@ async def get_stream_list():
     return {"running_streams": running_streams_list, "scheduled_streams": scheduled_streams}
 
 
-@app.get("/stream_info/")
+@app.get("/api/v1/stream_info/")
 async def get_stream_info(stream_id: str):
     # Get information for a specific stream
     logging.info(f"Retrieving information for stream ID {stream_id}")
@@ -386,7 +386,7 @@ async def get_stream_info(stream_id: str):
         session.close()
 
 
-@app.get("/get_live_status/")
+@app.get("/api/v1/get_live_status/")
 # get live status for a specific twitch account
 async def get_live_status(username: str):
     logging.info(f"Checking live status for username: {username}")
@@ -408,7 +408,7 @@ async def get_live_status(username: str):
         return {"live_status": "offline"}
 
 
-@app.get("/get_avatar/")
+@app.get("/api/v1/get_avatar/")
 # get avatar for a specific twitch account
 async def get_avatar(username: str):
     logging.info(f"Fetching avatar for username: {username}")
