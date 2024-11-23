@@ -56,6 +56,22 @@ This project is in early-early alpha, so any reviews, bug reports or feature req
 
 ## Docker
 
+Docker images are available on Docker Hub.
+
+```bash
+docker pull crazywolf13/streamlink-webui:latest
+```
+
+```bash
+```bash
+docker run -p 8000:8000 -dit \
+  --name streamlink-webui \
+  -e CLIENT_ID='your_client_id' \
+  -e CLIENT_SECRET='your_client_secret' \
+  -v /path/to/downloads:/app/downloads \
+  crazywolf13/streamlink-webui
+```
+``
 
 
 ## Bare Metal
