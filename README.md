@@ -63,7 +63,6 @@ docker pull crazywolf13/streamlink-webui:latest
 ```
 
 ```bash
-```bash
 docker run -p 8000:8000 -dit \
   --name streamlink-webui \
   -e CLIENT_ID='your_client_id' \
@@ -71,7 +70,6 @@ docker run -p 8000:8000 -dit \
   -v /path/to/downloads:/app/downloads \
   crazywolf13/streamlink-webui
 ```
-``
 
 
 ## Bare Metal
