@@ -1,0 +1,36 @@
+# Build Vue.js frontend
+FROM node:current-bookworm-slim AS frontend-builder
+WORKDIR /app/frontend
+
+# Install deps and build frontend
+COPY frontend/package.json frontend/yarn.lock ./
+RUN yarn install
+COPY frontend/ ./
+RUN yarn build
+
+# Stage 2: Set up backend
+FROM node:current-bookworm-slim
+WORKDIR /app
+
+# Install Python
+RUN apt-get update && apt-get install -y python3 python3-venv
+
+# Create venv
+RUN python3 -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+# Install Python deps and venv
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+RUN yarn global add concurrently
+
+COPY main.py .
+COPY db_schema.py .
+COPY download_task_model.py .
+COPY get_twitch_api.py .
+
+EXPOSE 8080
+
+# Run backend and frontend with concurrently
+CMD ["sh", "-c", "concurrently 'uvicorn main:app --host 0.0.0.0 --port 8000' 'yarn --cwd frontend serve'"]

@@ -1,5 +1,5 @@
 streamlink
-fastapi
+fastapi[standard]
 uvicorn
 pydantic
 starlette
