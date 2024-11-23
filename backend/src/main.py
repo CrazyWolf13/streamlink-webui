@@ -1,5 +1,7 @@
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import RedirectResponse
+from fastapi.staticfiles import StaticFiles
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
 from sqlalchemy.orm import sessionmaker
@@ -165,6 +167,9 @@ async def check_live_status_periodically(username, schedule_interval, schedule_e
 
 app = FastAPI()
 
+# Mount static frontend files
+app.mount("/dist", StaticFiles(directory="../../frontend/src/dist", html=True), name="static")
+
 # CORS-Configuration
 origins = ["http://localhost:8080/", "http://localhost:8080", "http://localhost/"]
 
@@ -177,12 +182,10 @@ app.add_middleware(
     expose_headers=["*"],
 )
 
-
-
-@app.get("/api/v1/")
-async def read_root():
-    return {"message": "Currently nothing at '/' consider viewing the /docs or /redoc also look at the readme.md file."}
-
+# Route / to /dist
+@app.get("/")
+async def root():
+    return RedirectResponse(url="/dist")
 
 
 @app.post("/api/v1/start/")
