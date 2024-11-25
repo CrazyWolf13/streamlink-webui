@@ -33,6 +33,8 @@ scheduled_tasks = {}
 
 # Load environment variables from .env file
 load_dotenv()
+client_id = os.getenv('CLIENT_ID')
+client_secret = os.getenv('CLIENT_SECRET')
 
 # Logging configuration
 Path('./logs').mkdir(exist_ok=True)
@@ -349,7 +351,6 @@ async def cleanup_db():
 @app.get("/api/v1/stream_list/")
 async def get_stream_list():
     # List all running streams
-    logging.info("Listing all running streams...")
     running_streams_list = list(running_streams.keys())
     logging.info(f"Total running streams: {len(running_streams_list)}")
     logging.info(f"Total scheduled streams: {len(scheduled_streams)}")
@@ -393,8 +394,6 @@ async def get_stream_info(stream_id: str):
 # get live status for a specific twitch account
 async def get_live_status(username: str):
     logging.info(f"Checking live status for username: {username}")
-    client_id = os.getenv('CLIENT_ID')
-    client_secret = os.getenv('CLIENT_SECRET')
 
     access_token = get_access_token(client_id, client_secret)
     if not access_token:
@@ -415,8 +414,6 @@ async def get_live_status(username: str):
 # get avatar for a specific twitch account
 async def get_avatar(username: str):
     logging.info(f"Fetching avatar for username: {username}")
-    client_id = os.getenv('CLIENT_ID')
-    client_secret = os.getenv('CLIENT_SECRET')
 
     access_token = get_access_token(client_id, client_secret)
     if not access_token:
