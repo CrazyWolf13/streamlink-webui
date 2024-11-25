@@ -142,7 +142,7 @@
 import StyledButton from './StyledButton.vue';
 import axios from 'axios';
 
-axios.defaults.baseURL = window.location.origin;
+axios.defaults.baseURL = process.env.BASE_URL;
 
 export default {
   components: { StyledButton },
