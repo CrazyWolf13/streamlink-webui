@@ -176,7 +176,7 @@ export default {
       };
 
       try {
-        const response = await axios.post('/api/v1/start', payload);
+        const response = await axios.post('../api/v1/start', payload);
         alert(`Stream started: ${response.data.message}`);
       } catch (error) {
         console.error(error);
@@ -191,7 +191,7 @@ export default {
       }
 
       try {
-        const response = await axios.get(`/api/v1/get_live_status?username=${this.startData.name}`);
+        const response = await axios.get(`../api/v1/get_live_status?username=${this.startData.name}`);
         const liveStatus = response.data.live_status;
 
         if (liveStatus === 'live') {
@@ -203,7 +203,7 @@ export default {
         }
 
         // Fetch avatar image
-        const avatarResponse = await axios.get(`/api/v1/get_avatar?username=${this.startData.name}`);
+        const avatarResponse = await axios.get(`../api/v1/get_avatar?username=${this.startData.name}`);
         this.avatarUrl = avatarResponse.data.profile_image_url;
 
       } catch (error) {
@@ -216,7 +216,7 @@ export default {
       const confirmation = window.confirm('Are you sure you want to terminate this stream?');
       if (confirmation) {
         try {
-          const response = await axios.post(`/api/v1/stop?stream_id=${stream_id}`);
+          const response = await axios.post(`../api/v1/stop?stream_id=${stream_id}`);
           alert(`Stream terminated: ${response.data.message}`);
           this.fetchRunningStreams(); // reload
         } catch (error) {
@@ -233,7 +233,7 @@ export default {
     },
     async terminateAllStreams() {
       try {
-        const response = await axios.post('/api/v1/stop_all');
+        const response = await axios.post('../api/v1/stop_all');
         alert(`All streams terminated: ${response.data.message}`);
         this.fetchRunningStreams(); //reload
       } catch (error) {
@@ -245,7 +245,7 @@ export default {
       this.streamsLoading = true; // Show loading screen
       try {
         // Fetch all running and scheduled stream IDs
-        const listResponse = await axios.get('/api/v1/stream_list');
+        const listResponse = await axios.get('../api/v1/stream_list');
         const runningStreamIds = listResponse.data.running_streams;
         const scheduledStreamIds = listResponse.data.scheduled_streams;
 
@@ -260,7 +260,7 @@ export default {
         this.detailedStreams = await Promise.all(
           runningDetailsResponses.map(async (res) => {
             const stream = res.data;
-            const avatarResponse = await axios.get(`/api/v1/get_avatar?username=${stream.name}`);
+            const avatarResponse = await axios.get(`../api/v1/get_avatar?username=${stream.name}`);
             stream.profile_image_url = avatarResponse.data.profile_image_url;
             return stream;
           })
@@ -277,7 +277,7 @@ export default {
         this.scheduledStreams = await Promise.all(
           scheduledDetailsResponses.map(async (res) => {
             const stream = res.data;
-            const avatarResponse = await axios.get(`/api/v1/get_avatar?username=${stream.name}`);
+            const avatarResponse = await axios.get(`../api/v1/get_avatar?username=${stream.name}`);
             stream.profile_image_url = avatarResponse.data.profile_image_url;
             return stream;
           })
@@ -295,7 +295,7 @@ export default {
     },
     async cleanup() {
       try {
-        const response = await axios.get('/api/v1/cleanup');
+        const response = await axios.get('../api/v1/cleanup');
         alert(response.data.result);
       } catch (error) {
         console.error(error);
