@@ -186,8 +186,9 @@ app.add_middleware(
 
 # Route / to /dist
 @app.get("/")
-async def root():
-    return RedirectResponse(url="/dist")
+async def root(request: Request):
+    host_url = request.url_for("root").replace("/","")  # Entfernt den Pfad
+    return RedirectResponse(url=f"{host_url}/dist")
 
 
 @app.post("/api/v1/start/")
