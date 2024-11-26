@@ -186,9 +186,8 @@ app.add_middleware(
 
 # Route / to /dist
 @app.get("/")
-async def root(request: Request):
-    base_url = request.base_url
-    return RedirectResponse(url=f"{base_url}dist")
+async def root():
+    return RedirectResponse(url="/dist")
 
 
 @app.post("/api/v1/start/")
