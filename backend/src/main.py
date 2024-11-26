@@ -187,7 +187,7 @@ app.add_middleware(
 # Route / to /dist
 @app.get("/")
 async def root(request: Request):
-    host_url = request.url_for("root").replace("/","")  # Entfernt den Pfad
+    host_url = str(request.base_url).rstrip("/")
     return RedirectResponse(url=f"{host_url}/dist")
 
 
