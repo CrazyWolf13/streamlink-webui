@@ -1,6 +1,6 @@
 #!/bin/sh
 
-cat <<EOF > /app/frontend/src/public/config.js
+cat <<EOF > /app/frontend/src/dist/config.js
 window.config = {
     baseURL: '${BASE_URL}'
 };
