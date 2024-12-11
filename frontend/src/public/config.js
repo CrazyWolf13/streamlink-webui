@@ -1,3 +1,3 @@
 window.config = {
-    baseURL: 'http://example.com/' // Set your default base URL here
+    baseURL: 'http://example.com/' // This will be updated by the docker run command script.
     };
