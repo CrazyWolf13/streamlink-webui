@@ -140,7 +140,7 @@
 
 <script>
 import StyledButton from './StyledButton.vue';
-import api from './api.js'; // Import custom api instance
+import api from '../api.js'; // Import custom api instance
 
 
 export default {
