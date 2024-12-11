@@ -175,7 +175,7 @@ export default {
 
       try {
         const apiStore = useApiStore();
-        const response = await apiStore.client.post('/api/v1/start/', payload);
+        const response = await apiStore.client.post('/api/v1/start', payload, '/');
         alert(`Stream started: ${response.data.message}`);
       } catch (error) {
         console.error(error);
@@ -191,7 +191,7 @@ export default {
 
       try {
         const apiStore = useApiStore();
-        const response = await apiStore.client.get(`/api/v1/get_live_status/?username=${this.startData.name}`);
+        const response = await apiStore.client.get(`/api/v1/get_live_status?username=${this.startData.name}/`);
         const liveStatus = response.data.live_status;
 
         if (liveStatus === 'live') {
@@ -203,7 +203,7 @@ export default {
         }
 
         // Fetch avatar image
-        const avatarResponse = await apiStore.client.get(`/api/v1/get_avatar/?username=${this.startData.name}`);
+        const avatarResponse = await apiStore.client.get(`/api/v1/get_avatar?username=${this.startData.name}/`);
         this.avatarUrl = avatarResponse.data.profile_image_url;
 
       } catch (error) {
@@ -217,7 +217,7 @@ export default {
       if (confirmation) {
         try {
           const apiStore = useApiStore();
-          const response = await apiStore.client.post(`/api/v1/stop/?stream_id=${stream_id}`);
+          const response = await apiStore.client.post(`/api/v1/stop?stream_id=${stream_id}/`);
           alert(`Stream terminated: ${response.data.message}`);
           this.fetchRunningStreams(); // reload
         } catch (error) {
@@ -263,7 +263,7 @@ export default {
         this.detailedStreams = await Promise.all(
           runningDetailsResponses.map(async (res) => {
             const stream = res.data;
-            const avatarResponse = await apiStore.client.get(`/api/v1/get_avatar/?username=${stream.name}`);
+            const avatarResponse = await apiStore.client.get(`/api/v1/get_avatar?username=${stream.name}/`);
             stream.profile_image_url = avatarResponse.data.profile_image_url;
             return stream;
           })
@@ -280,7 +280,7 @@ export default {
         this.scheduledStreams = await Promise.all(
           scheduledDetailsResponses.map(async (res) => {
             const stream = res.data;
-            const avatarResponse = await apiStore.client.get(`/api/v1/get_avatar/?username=${stream.name}`);
+            const avatarResponse = await apiStore.client.get(`/api/v1/get_avatar?username=${stream.name}/`);
             stream.profile_image_url = avatarResponse.data.profile_image_url;
             return stream;
           })
