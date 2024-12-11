@@ -16,10 +16,12 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY /backend/src/ ./
 
+COPY generate_config.sh /app/generate_config.sh
+
 # Copy frontend build to backend build
 COPY --from=frontend-builder /app/frontend/ /app/frontend/
 
 EXPOSE 8000
 
-# Run app with fastapi
-CMD ["fastapi", "run", "main.py"]
+# Run generate_config.sh before starting the app with fastapi
+CMD ["sh", "-c", "/app/generate_config.sh && fastapi run main.py"]
