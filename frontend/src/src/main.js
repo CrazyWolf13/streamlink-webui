@@ -8,6 +8,6 @@ const pinia = createPinia();
 app.use(pinia);
 
 const apiStore = useApiStore();
-apiStore.setBaseURL(window.config.baseURL); // Set the baseURL dynamically from config.js
+apiStore.setBaseURL(window.config.baseURL); // Load the BaseURL dynamically from the config
 
 createApp(App).mount('#app')
