@@ -8,7 +8,24 @@ This project is in early-early alpha, so any reviews, bug reports or feature req
 
 ## Table of Contents
 
-[TOC]
+- [Streamlink WebUI](#streamlink-webui)
+  - [Table of Contents](#table-of-contents)
+  - [Features](#features)
+  - [Showcase](#showcase)
+    - [Start job section](#start-job-section)
+    - [Running jobs section](#running-jobs-section)
+- [Installation](#installation)
+  - [Docker](#docker)
+    - [Behind a domain](#behind-a-domain)
+  - [Bare Metal](#bare-metal)
+  - [Configuration](#configuration)
+  - [API Endpoints](#api-endpoints)
+  - [Logging](#logging)
+  - [License](#license)
+  - [License for Included Software](#license-for-included-software)
+      - [Streamlink](#streamlink)
+  - [Acknowledgements](#acknowledgements)
+
 
 ## Features
 
