@@ -16,7 +16,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY /backend/src/ ./
 
-COPY generate_config.sh /app/generate_config.sh
+COPY start.sh /app/start.sh
 
 # Copy frontend build to backend build
 COPY --from=frontend-builder /app/frontend/ /app/frontend/
