@@ -63,6 +63,20 @@ docker run -p 8000:8000 -dit \
   crazywolf13/streamlink-webui
 ```
 
+### Behind a domain
+Example with a reverse proxy and domain setup:
+
+```bash
+docker run -p 8000:8000 -dit \
+  --name streamlink-webui \
+  -e CLIENT_ID='your_client_id' \
+  -e CLIENT_SECRET='your_client_secret' \
+  -e BASE_URL='https://sub.domain.com' \
+  -e REVERSE_PROXY=True \
+  -v /path/to/downloads:/app/downloads \
+  crazywolf13/streamlink-webui
+```
+
 
 ## Bare Metal
 
