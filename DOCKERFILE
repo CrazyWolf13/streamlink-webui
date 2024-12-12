@@ -24,4 +24,4 @@ COPY --from=frontend-builder /app/frontend/ /app/frontend/
 EXPOSE 8000
 
 # Run generate_config.sh before starting the app with fastapi
-CMD ["sh", "-c", "/app/generate_config.sh && fastapi run main.py"]
+CMD ["sh", "-c", "/app/start.sh"]
