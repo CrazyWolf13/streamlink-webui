@@ -1,6 +1,6 @@
 # Streamlink WebUI 
 
-This Repository currently contains the API for an application which simplifies the download of Twitch Streams.
+This repository currently contains the code for an application which simplifies the download of Twitch Streams.
 
 I used a FastAPI backend and a Vue.js frontend.
 
