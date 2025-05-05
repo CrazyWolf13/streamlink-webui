@@ -1,7 +1,17 @@
 #!/bin/sh
 
 # Set the base URL for the frontend, from the env var to the config.js file
-cat <<EOF > /app/frontend/src/dist/config.js
+# This code ensures it runs inside docker but also inside a community-scripts-lxc
+SCRIPT_PATH="$(readlink -f "$0")"
+SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
+
+if [[ "$SCRIPT_PATH" == "/app/start.sh" ]]; then
+  CONFIG_PATH="/app/frontend/src/dist/config.js"
+else
+  CONFIG_PATH="${SCRIPT_DIR%/*}/app/frontend/src/dist/config.js"
+fi
+
+cat <<EOF > "$CONFIG_PATH"
 window.config = {
     baseURL: '${BASE_URL}'
 };
