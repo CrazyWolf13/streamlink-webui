@@ -17,6 +17,7 @@ This project is in early-early alpha, so any reviews, bug reports or feature req
 - [Installation](#installation)
   - [Docker](#docker)
     - [Behind a domain](#behind-a-domain)
+  - [Proxmox](#proxmox)
   - [Bare Metal](#bare-metal)
   - [Configuration](#configuration)
   - [API Endpoints](#api-endpoints)
@@ -78,6 +79,9 @@ docker run -p 8000:8000 -dit \
   crazywolf13/streamlink-webui
 ```
 
+## Proxmox
+
+Streamlink-WebUI is available on Community Scripts, a set of easy installer scripts for Proxmox LXC: https://community-scripts.github.io/ProxmoxVE/scripts?id=streamlink-webui
 
 ## Bare Metal
 
