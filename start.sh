@@ -8,7 +8,7 @@ SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
 if [[ "$SCRIPT_PATH" == "/app/start.sh" ]]; then
   CONFIG_PATH="/app/frontend/src/dist/config.js"
 else
-  CONFIG_PATH="${SCRIPT_DIR}/app/frontend/src/dist/config.js"
+  CONFIG_PATH="${SCRIPT_DIR}/frontend/src/dist/config.js"
 fi
 
 cat <<EOF > "$CONFIG_PATH"
