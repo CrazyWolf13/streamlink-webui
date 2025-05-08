@@ -165,13 +165,6 @@ Thank you!
 
 Developed by CrazyWolf13 with ❤️
 
-
 ## Star History
 
-<a href="https://www.star-history.com/#CrazyWolf13/streamlink-webui&Date">
- <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=CrazyWolf13/streamlink-webui&type=Date&theme=dark" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=CrazyWolf13/streamlink-webui&type=Date" />
-   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=CrazyWolf13/streamlink-webui&type=Date" />
- </picture>
-</a>
+[![Star History Chart](https://api.star-history.com/svg?repos=CrazyWolf13/streamlink-webui&type=Timeline)](https://www.star-history.com/#CrazyWolf13/streamlink-webui&Timeline)
