@@ -39,7 +39,7 @@
               <select v-model="startData.quality">
                 <option value="audio_only">Audio Only</option>
                 <option value="best">Best</option>
-                <option value="720p">720p</option>
+                <option value="720p60">720p60</option>
                 <option value="480p">480p</option>
                 <option value="360p">360p</option>
                 <option value="160p">160p</option>
