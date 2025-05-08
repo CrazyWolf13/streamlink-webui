@@ -165,6 +165,7 @@ Thank you!
 
 Developed by CrazyWolf13 with ❤️
 
+
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=CrazyWolf13/streamlink-webui&type=Timeline)](https://www.star-history.com/#CrazyWolf13/streamlink-webui&Timeline)
+[![Star History Chart](https://api.star-history.com/svg?repos=CrazyWolf13/streamlink-webui&type=Date)](https://www.star-history.com/#CrazyWolf13/streamlink-webui&Date)
