@@ -17,6 +17,7 @@ This project is in early-early alpha, so any reviews, bug reports or feature req
 - [Installation](#installation)
   - [Docker](#docker)
     - [Behind a domain](#behind-a-domain)
+  - [Proxmox](#proxmox)
   - [Bare Metal](#bare-metal)
   - [Configuration](#configuration)
   - [API Endpoints](#api-endpoints)
@@ -78,6 +79,9 @@ docker run -p 8000:8000 -dit \
   crazywolf13/streamlink-webui
 ```
 
+## Proxmox
+
+Streamlink-WebUI is available on Community Scripts, a set of easy installer scripts for Proxmox LXC: https://community-scripts.github.io/ProxmoxVE/scripts?id=streamlink-webui
 
 ## Bare Metal
 
@@ -160,3 +164,13 @@ Thank you!
 ---
 
 Developed by CrazyWolf13 with ❤️
+
+## ⭐ Star History
+
+<a href="https://star-history.com/#CrazyWolf13/streamlink-webui&Date">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=CrazyWolf13/streamlink-webui&type=Date&theme=dark" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=CrazyWolf13/streamlink-webui&type=Date" />
+   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=CrazyWolf13/streamlink-webui&type=Date" />
+ </picture>
+</a>
