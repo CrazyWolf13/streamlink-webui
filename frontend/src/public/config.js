@@ -1,3 +1,3 @@
 window.config = {
-    baseURL: 'http://example.com/' // This will be updated by the docker run command script.
+    baseURL: 'http://127.0.0.1:8000/' // This will be updated by the docker run command script.
     };

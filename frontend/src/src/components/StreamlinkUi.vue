@@ -27,41 +27,68 @@
                     <circle cx="12" cy="12" r="10" fill="#4d4d4d" />
                   </svg>
                 </div>
-              <div v-else>
-                <!-- profile image  -->
-                <img :src="avatarUrl" alt="Profile Image" class="profile-image-small" />
-                <div class="status-indicator" :class="{ 'status-online': isUserLive, 'status-offline': !isUserLive }"></div>
+                <div v-else>
+                  <!-- profile image  -->
+                  <img :src="avatarUrl" alt="Profile Image" class="profile-image-small" />
+                  <div class="status-indicator" :class="{ 'status-online': isUserLive, 'status-offline': !isUserLive }"></div>
+                </div>
               </div>
             </div>
           </div>
-            <div class="form-group">
-              <label>Quality:</label>
-              <select v-model="startData.quality">
-                <option value="audio_only">Audio Only</option>
-                <option value="best">Best</option>
-                <option value="720p">720p</option>
-                <option value="480p">480p</option>
-                <option value="360p">360p</option>
-                <option value="160p">160p</option>
-              </select>
+          <div class="form-group">
+            <label>Quality:</label>
+            <select v-model="startData.qualityOption">
+              <option value="audio_only">Audio Only</option>
+              <option value="best">Best</option>
+              <option value="1080p">1080p</option>
+              <option value="720p">720p</option>
+              <option value="480p">480p</option>
+              <option value="360p">360p</option>
+              <option value="160p">160p</option>
+              <option value="worst">Worst</option>
+              <option value="custom">Custom</option>
+            </select>
+            
+            <!-- Custom quality settings, shown only when 'custom' is selected -->
+            <div v-if="startData.qualityOption === 'custom'" class="custom-quality-container">
+              <div class="custom-quality-input">
+                <label>Resolution:</label>
+                <select v-model="startData.customResolution">
+                  <option value="1080p">1080p</option>
+                  <option value="720p">720p</option>
+                  <option value="480p">480p</option>
+                  <option value="360p">360p</option>
+                  <option value="160p">160p</option>
+                </select>
+              </div>
+              <div class="custom-quality-input">
+                <label>FPS:</label>
+                <input 
+                  type="number" 
+                  v-model="startData.customFps" 
+                  min="0" 
+                  max="120" 
+                  placeholder="30"
+                  class="fps-input"
+                />
+              </div>
             </div>
-            <div class="form-group">
-              <label>Filename:</label>
-              <input type="checkbox" v-model="startData.append_time" />
-              Append datetime to filename
-            </div>
-            <div class="form-group">
-              <input type="checkbox" v-model="startData.block_ads" />
-              Block ads
-            </div>
-            <div class="form-group">
-              <input type="checkbox" v-model="startData.schedule" />
-              Schedule
-            </div>
-            <StyledButton :clickHandler="startStream">Start</StyledButton>
           </div>
+          <div class="form-group">
+            <label>Filename:</label>
+            <input type="checkbox" v-model="startData.append_time" />
+            Append datetime to filename
+          </div>
+          <div class="form-group">
+            <input type="checkbox" v-model="startData.block_ads" />
+            Block ads
+          </div>
+          <div class="form-group">
+            <input type="checkbox" v-model="startData.schedule" />
+            Schedule
+          </div>
+          <StyledButton :clickHandler="startStream">Start</StyledButton>
         </div>
-
 
         <!-- Running Streams -->
         <div v-if="currentView === 'list'">
@@ -149,7 +176,9 @@ export default {
       currentView: 'start',
       startData: {
         name: '',
-        quality: 'best',
+        qualityOption: 'best', // Changed from quality to qualityOption
+        customResolution: '720p', // Default custom resolution
+        customFps: 30, // Default custom FPS
         block_ads: true,
         append_time: true,
         schedule: false,
@@ -163,11 +192,29 @@ export default {
       streamsLoading: false, 
     };
   },
+  computed: {
+    // Computed property to get the effective quality string
+    qualityString() {
+      if (this.startData.qualityOption !== 'custom') {
+        return this.startData.qualityOption;
+      }
+      
+      // For custom quality, format as resolution + fps if FPS is specified
+      const resolution = this.startData.customResolution || '720p';
+      const fps = this.startData.customFps;
+      
+      if (fps && fps > 0) {
+        return `${resolution}${fps}`; // e.g. "720p30"
+      } else {
+        return resolution; // Just use the resolution without FPS
+      }
+    }
+  },
   methods: {
     async startStream() {
       const payload = {
         name: this.startData.name || '',
-        quality: this.startData.quality || 'best',
+        quality: this.qualityString, // Use the computed quality string
         block_ads: !!this.startData.block_ads,
         append_time: !!this.startData.append_time, 
         schedule: !!this.startData.schedule,
@@ -177,6 +224,11 @@ export default {
         const apiStore = useApiStore();
         const response = await apiStore.client.post('/api/v1/start/', payload);
         alert(`Stream started: ${response.data.message}`);
+        
+        // If successful and viewing running streams, refresh the list
+        if (this.currentView === 'list') {
+          this.fetchRunningStreams();
+        }
       } catch (error) {
         console.error(error);
         alert('Failed to start the stream.');
@@ -401,6 +453,52 @@ select {
   border-radius: 5px;
 }
 
+/* Custom Quality Container Styles */
+.custom-quality-container {
+  margin-top: 15px;
+  background-color: #333;
+  padding: 15px;
+  border-radius: 5px;
+  border-left: 3px solid var(--twitch-purple);
+}
+
+.custom-quality-input {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.custom-quality-input label {
+  min-width: 80px;
+  margin-right: 10px;
+}
+
+.custom-quality-input select,
+.custom-quality-input input {
+  flex: 1;
+}
+
+.fps-input {
+  background-color: #444;
+  color: var(--font-color);
+  border: 1px solid #555;
+  border-radius: 4px;
+  padding: 8px;
+  width: 70px;
+}
+
+/* Remove spinner for Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* Remove spinner for Chrome, Safari, Edge, Opera */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 /* Stream Boxes */
 .stream-box {
   background-color: var(--dark-grey);
@@ -592,4 +690,4 @@ button i {
   width: auto;
   max-width: 60vw; 
 }
-  </style>
+</style>

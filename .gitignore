@@ -2,3 +2,7 @@ __pycache__/
 downloads/
 logs/
 .env
+.vs/
+backend/src/application.db
+frontend/src/node_modules/
+frontend/src/dist
