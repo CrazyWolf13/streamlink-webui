@@ -178,7 +178,7 @@ export default {
         name: '',
         qualityOption: 'best', // Changed from quality to qualityOption
         customResolution: '720p', // Default custom resolution
-        customFps: 30, // Default custom FPS
+        customFps: 60, // Default custom FPS
         block_ads: true,
         append_time: true,
         schedule: false,
