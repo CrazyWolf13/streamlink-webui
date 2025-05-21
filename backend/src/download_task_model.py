@@ -54,9 +54,9 @@ class download_task(BaseModel):
     
     @validator('quality')
     def validate_quality(cls, v):
-        acceptable_qualities = ["audio_only", "160p", "worst", "360p", "480p", "720p", "720p60", "1080p60", "best"]
+        acceptable_qualities = ["worst", "audio_only", "160p", "160p30", "360p", "360p30", "480p", "480p30", "720p", "720p60", "1080p60", "best"]
         if v not in acceptable_qualities:
-            raise ValueError('Invalid quality parameter. Acceptable values are: audio_only, 160p, worst, 360p, 480p, 720p, 720p60, 1080p60, best')
+            raise ValueError('Invalid quality parameter. Acceptable values are: audio_only, 160p, worst, 360p, 480p, 720p, 1080p, best, with either 30 or 60 fps. appended as 1080p60 or 720p30.')
         return v
     
     @validator('output_dir')
