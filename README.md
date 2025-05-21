@@ -174,8 +174,3 @@ Developed by CrazyWolf13 with ❤️
    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=CrazyWolf13/streamlink-webui&type=Date" />
  </picture>
 </a>
-
-
-## Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=CrazyWolf13/streamlink-webui&type=Date)](https://www.star-history.com/#CrazyWolf13/streamlink-webui&Date)
