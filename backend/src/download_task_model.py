@@ -21,6 +21,14 @@ else:
     project_root = os.path.abspath(os.path.join(current_dir, "../../"))
     DOWNLOAD_PATH = os.path.join(project_root, "downloads")
 
+# Make Schedule_END user Configurable via ENV_VAR
+if os.getenv("SCHEDULE_END") is not None:
+    SCHEDULE_END = int(os.getenv("SCHEDULE_END"))
+    if SCHEDULE_END <= 0:
+        raise ValueError('Invalid SCHEDULE_END. The SCHEDULE_END must be a positive integer.')
+else:
+    SCHEDULE_END = 48
+
 class download_task(BaseModel):
     name: str
     base_dl_url: str = "https://www.twitch.tv/"
@@ -32,7 +40,7 @@ class download_task(BaseModel):
     stream_id: str = 0
     schedule: bool = False
     schedule_interval: int = 5
-    schedule_end: int = 12
+    schedule_end: int = int(SCHEDULE_END)
 
     @validator('name')
     def validate_username(cls, v):
