@@ -375,20 +375,6 @@ export default {
 </script>
 
 <style scoped>
-:root {
-  --twitch-purple: #9146ff;
-  --dark-grey: #2d2d2d;
-  --light-grey: #393939;
-  --white: #ffffff;
-  --hover-grey: #4d4d4d;
-  --dark-background: #212121;
-  --font-color: #ababab;
-}
-
-body {
-  background-color: var(--dark-background);
-}
-
 /* Layout */
 .container {
   display: flex;
