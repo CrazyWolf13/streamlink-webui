@@ -38,7 +38,7 @@ export default {
 html,body,#app{height:100%;margin:0}
 body{
   font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
-  background: linear-gradient(135deg,var(--bg-1),var(--bg-2),var(--bg-3));
+  background: #0b0c10;
   color: var(--muted);
   -webkit-font-smoothing:antialiased;
   -moz-osx-font-smoothing:grayscale;
