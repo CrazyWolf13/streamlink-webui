@@ -408,6 +408,10 @@ export default {
           this.settings.client_secret = parsed.client_secret || '';
           this.settings.base_url = parsed.base_url || '';
           this.settings.reverse_proxy = !!parsed.reverse_proxy;
+          if (parsed.base_url) {
+            const apiStore = useApiStore();
+            apiStore.setBaseURL(parsed.base_url);
+          }
         }
       } catch (e) {
         console.error('Failed to load settings', e);
