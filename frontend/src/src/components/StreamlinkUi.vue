@@ -7,6 +7,7 @@
           <li :class="{ active: currentView === 'start' }" @click="currentView = 'start'">Start Stream</li>
           <li :class="{ active: currentView === 'list' }" @click="handleRunningStreamsClick">Running Streams</li>
           <li :class="{ active: currentView === 'cleanup' }" @click="currentView = 'cleanup'">Cleanup</li>
+          <li :class="{ active: currentView === 'settings' }" @click="currentView = 'settings'">Settings</li>
         </ul>
       </aside>
 
@@ -159,6 +160,28 @@
           <h2>Cleanup</h2>
           <StyledButton :clickHandler="cleanup">Cleanup DB and Logs</StyledButton>
         </div>
+
+        <!-- Settings -->
+        <div v-if="currentView === 'settings'" class="settings-panel">
+          <h2>Settings</h2>
+          <div class="form-group">
+            <label for="clientId">CLIENT_ID:</label>
+            <input id="clientId" v-model="settings.client_id" placeholder="Enter CLIENT_ID" />
+          </div>
+          <div class="form-group">
+            <label for="clientSecret">CLIENT_SECRET:</label>
+            <input id="clientSecret" type="password" v-model="settings.client_secret" placeholder="Enter CLIENT_SECRET" />
+          </div>
+          <div class="form-group">
+            <label for="baseUrl">BASE_URL:</label>
+            <input id="baseUrl" v-model="settings.base_url" placeholder="http://127.0.0.1:8000/" />
+          </div>
+          <div class="form-group">
+            <input id="reverseProxy" type="checkbox" v-model="settings.reverse_proxy" />
+            <label for="reverseProxy">REVERSE_PROXY</label>
+          </div>
+          <StyledButton :clickHandler="saveSettings" class="save-settings-btn">Save Settings</StyledButton>
+        </div>
       </main>
     </div>
   </div>
@@ -189,7 +212,13 @@ export default {
       runningStreams: [], 
       detailedStreams: [], 
       scheduledStreams: [], 
-      streamsLoading: false, 
+      streamsLoading: false,
+      settings: {
+        client_id: '',
+        client_secret: '',
+        base_url: '',
+        reverse_proxy: false,
+      },
     };
   },
   computed: {
@@ -209,6 +238,9 @@ export default {
         return resolution; // Just use the resolution without FPS
       }
     }
+  },
+  mounted() {
+    this.loadSettings();
   },
   methods: {
     async startStream() {
@@ -347,6 +379,43 @@ export default {
     handleRunningStreamsClick() {
       this.currentView = 'list';
       this.fetchRunningStreams();
+    },
+    saveSettings() {
+      try {
+        const apiStore = useApiStore();
+        const payload = {
+          client_id: this.settings.client_id || '',
+          client_secret: this.settings.client_secret || '',
+          base_url: this.settings.base_url || '',
+          reverse_proxy: !!this.settings.reverse_proxy,
+        };
+        localStorage.setItem('streamlink_settings', JSON.stringify(payload));
+        if (payload.base_url) {
+          apiStore.setBaseURL(payload.base_url);
+        }
+        alert('Settings saved.');
+      } catch (e) {
+        console.error('Failed to save settings', e);
+        alert('Failed to save settings.');
+      }
+    },
+    loadSettings() {
+      try {
+        const raw = localStorage.getItem('streamlink_settings');
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          this.settings.client_id = parsed.client_id || '';
+          this.settings.client_secret = parsed.client_secret || '';
+          this.settings.base_url = parsed.base_url || '';
+          this.settings.reverse_proxy = !!parsed.reverse_proxy;
+          if (parsed.base_url) {
+            const apiStore = useApiStore();
+            apiStore.setBaseURL(parsed.base_url);
+          }
+        }
+      } catch (e) {
+        console.error('Failed to load settings', e);
+      }
     },
     async cleanup() {
       try {
@@ -689,5 +758,14 @@ button i {
   flex: 1;
   width: auto;
   max-width: 60vw; 
+}
+.settings-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.save-settings-btn {
+  width: 14rem;
 }
 </style>
