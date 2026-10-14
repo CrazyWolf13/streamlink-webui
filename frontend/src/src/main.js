@@ -8,6 +8,6 @@ const pinia = createPinia();
 app.use(pinia);
 
 const apiStore = useApiStore();
-apiStore.setBaseURL(window.config.baseURL); 
+apiStore.setBaseURL(window.config.baseURL);
 
-createApp(App).mount('#app')
+app.mount('#app')

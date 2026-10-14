@@ -375,20 +375,6 @@ export default {
 </script>
 
 <style scoped>
-:root {
-  --twitch-purple: #9146ff;
-  --dark-grey: #2d2d2d;
-  --light-grey: #393939;
-  --white: #ffffff;
-  --hover-grey: #4d4d4d;
-  --dark-background: #212121;
-  --font-color: #ababab;
-}
-
-body {
-  background-color: var(--dark-background);
-}
-
 /* Layout */
 .container {
   display: flex;
@@ -399,20 +385,22 @@ body {
   background-color: var(--dark-grey);
   color: var(--white);
   padding: 15px;
-  width: 200px;
+  width: 220px;
 }
 
 .sidebar ul {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 .sidebar li {
   cursor: pointer;
-  margin: 10px 0;
-  padding: 10px;
-  border-radius: 5px;
+  margin: 8px 0;
+  padding: 10px 12px;
+  border-radius: 6px;
   transition: background-color 0.3s ease;
+  text-align: left;
 }
 
 .sidebar li:hover {
@@ -428,37 +416,44 @@ body {
   background-color: var(--light-grey);
   color: var(--font-color);
   flex-grow: 1;
-  padding: 20px;
+  padding: 24px;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 40px); 
+  gap: 16px;
+  height: calc(100vh - 40px);
 }
 
 /* Form Styles */
 .form-group {
-  margin-bottom: 20px;
+  margin-bottom: 16px;
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: var(--white);
 }
 
 input,
 select {
   width: 100%;
-  padding: 8px;
-  margin-top: 5px;
+  padding: 10px;
   background-color: #333;
   border: none;
   color: var(--font-color);
-  border-radius: 5px;
+  border-radius: 6px;
 }
 
 /* Custom Quality Container Styles */
 .custom-quality-container {
-  margin-top: 15px;
+  margin-top: 12px;
   background-color: #333;
-  padding: 15px;
-  border-radius: 5px;
+  padding: 12px;
+  border-radius: 6px;
   border-left: 3px solid var(--twitch-purple);
 }
 
@@ -484,7 +479,7 @@ select {
   border: 1px solid #555;
   border-radius: 4px;
   padding: 8px;
-  width: 70px;
+  width: 80px;
 }
 
 /* Remove spinner for Firefox */
@@ -499,29 +494,27 @@ input[type="number"]::-webkit-inner-spin-button {
   margin: 0;
 }
 
-/* Stream Boxes */
+/* Stream Cards */
 .stream-box {
-  background-color: var(--dark-grey);
-  padding: 20px;
-  border-radius: 10px;
-  margin-top: 10px;
-  display: flex;
-  align-items: center; 
-  gap: 20px;
   background-color: #333;
+  padding: 16px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
   position: relative;
 }
 
 .stream-box .stream-info {
-  flex-grow: 1;
+  flex: 1 1 auto;
 }
 
 .stream-box h3 {
-  margin-top: 0;
+  margin: 0 0 6px 0;
 }
 
 .stream-box p {
-  margin: 5px 0;
+  margin: 4px 0;
 }
 
 .stream-box .profile-image-container {
@@ -532,32 +525,31 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .stream-box img.profile-image {
-  width: 140px;
-  height: 140px;
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
-  margin-right: 10vw;
-  transition: transform 0.2s ease-in-out; 
+  transition: transform 0.2s ease-in-out;
 }
 
 .stream-box img.profile-image:hover {
-  transform: scale(1.1); 
+  transform: scale(1.06);
 }
 
 .stream-box .scheduled-icon-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 10vw;
+  width: 48px;
 }
 
 .stream-box .scheduled-icon {
-  font-size: 2.5vw;
+  font-size: 24px;
   color: var(--twitch-purple);
   transition: transform 0.2s ease-in-out;
 }
 
 .stream-box .scheduled-icon:hover {
-  transform: scale(1.1); 
+  transform: scale(1.1);
 }
 
 .stream-box .scheduled-icon-container.invisible {
@@ -566,11 +558,11 @@ input[type="number"]::-webkit-inner-spin-button {
 
 .streams-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
-  gap: 20px;
-  flex-grow: 1; 
-  overflow-y: auto; 
-  max-height: calc(100vh - 140px); 
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+  flex-grow: 1;
+  overflow-y: auto;
+  max-height: calc(100vh - 140px);
 }
 
 button {
@@ -583,7 +575,7 @@ button i {
   font-size: 18px;
 }
 
-/* Button Styles */
+/* Icon-only Terminate Button */
 .terminate-btn {
   background-color: transparent;
   color: #d9534f;
@@ -611,6 +603,7 @@ button i {
   font-size: 12px;
   white-space: nowrap;
 }
+
 /* Terminate All Button */
 .terminate-all-btn {
   background-color: #d9534f;
@@ -629,9 +622,15 @@ button i {
   background-color: red;
 }
 
-/* Smaller version of styled button */
+/* Smaller StyledButton container when used inline */
 .small-button {
-  width: 10vw;
+  max-width: 200px;
+  margin-left: 8px;
+}
+
+/* Position refresh action to the right within its container */
+.refresh-btn {
+  margin-left: auto;
 }
 
 /* Avatar Container */
@@ -648,7 +647,7 @@ button i {
 }
 
 .profile-image-small {
-  width: 10vw; 
+  width: 10vw;
   height: 10vw;
   border-radius: 50%;
   border: 2px solid var(--white);
@@ -682,12 +681,12 @@ button i {
 .channel-input-avatar {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 12px;
 }
 
 .channel-input-avatar input {
   flex: 1;
   width: auto;
-  max-width: 60vw; 
+  max-width: 60vw;
 }
 </style>
